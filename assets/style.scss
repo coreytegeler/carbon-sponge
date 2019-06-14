@@ -1,0 +1,145 @@
+@import 'bootstrap-reboot.min.css';
+@import 'bootstrap-grid.min.css';
+@import 'vars.scss';
+
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	background: $lightest;
+	color: $dark;
+	font-family: sans-serif;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	@include smText;
+}
+
+body {
+	display: table;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5 {
+	margin: 0;
+}
+h1 {
+	@include xxlText;
+	@include displayBold;
+	@include md {
+		@include xlText;
+	}
+}
+h2 {
+	@include xlText;
+	@include displayReg;
+	@include md {
+		@include lgText;
+	}
+}
+h3 {
+	@include lgText;
+	@include displayReg;
+	font-weight: normal;
+}
+h4 {
+	@include mdText;
+	font-weight: normal;
+}
+h5 {
+	@include smText;
+	font-weight: normal;
+}
+
+a, a:hover, a:visited {
+	@include underline($light, $cool);
+	color: $dark;
+}
+a:hover {
+	@include underline($light, $warm);
+	&.cool, &.warm {
+		color: $dark !important;
+	}
+}
+
+p {
+	margin: 0 0 1rem 0;
+	&:last-of-type {
+		margin: 0;
+	}
+}
+
+img {
+	width: 100%;
+}
+
+.mobile {
+	@include hide;
+}
+
+@include sm {
+	.mobile {
+		@include show;
+	}
+	.desktop {
+		@include hide;
+	}
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+li {
+	margin: 0 0 1rem 0;
+}
+
+header {
+	padding: 1rem;
+}
+
+ //graph
+section {
+	width: calc(100% - 10rem);
+	margin: 5rem auto 10rem auto;
+	padding: 2rem;
+	border: 1rem inset black;
+}
+.bed-title {
+	text-align: center;
+	margin: 0 0 2rem 0;
+}
+.graph-col {
+	display: flex;
+	flex-direction: column;
+}
+.graph-title {
+	text-align: center;
+}
+.graph-wrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	padding-bottom: 60%;
+	display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+}
+svg {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: inline-block;
+	pointer-events: none;
+	.area {
+	  fill: black;
+	  // clip-path: url(#clip);
+	}
+}

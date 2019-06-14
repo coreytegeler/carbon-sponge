@@ -1,0 +1,39 @@
+{
+  "name": "carbon-sponge",
+  "version": "0.0.1",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "watch": "gulp watch",
+    "build": "gulp build --production",
+    "browsersync": "browser-sync start --server --port 9000 --no-notify --no-open --files '**/*.css' '**/*.js' '*.html'",
+    "start": "npm run watch & npm run browsersync"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreytegeler/carbon-sponge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coreytegeler/carbon-sponge/issues"
+  },
+  "homepage": "https://github.com/coreytegeler/carbon-sponge#readme",
+  "devDependencies": {
+    "browser-sync": "^2.3.1",
+    "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-clean-css": "^3.10.0",
+    "gulp-cli": "^2.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.2",
+    "gulp-util": "^3.0.8",
+    "merge": ">=1.2.1",
+    "npm": "^6.9.0",
+    "yargs": "^6.6.0"
+  }
+}

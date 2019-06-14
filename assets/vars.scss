@@ -1,0 +1,107 @@
+// @import url(https://fonts.googleapis.com/css?family=Oswald:400,700&subset=latin-ext);
+$highlight: #f6d465;
+$highdark: #d9a90d;
+$lightest: white;
+$light: #f6d465;
+$light: #ffe900;
+$light: #fbff88;
+$light: white;
+$dark: black;
+
+$warm: tomato;
+$cool: cornflowerblue;
+
+// wheat
+// tomato
+// plum
+// cornsilk
+
+$displayFont: 'Oswald', sans-serif;
+
+@mixin displayReg {
+	font-family: $displayFont;
+	font-weight: 400;
+}
+@mixin displayBold {
+	font-family: $displayFont;
+	font-weight: 700;
+}
+
+@mixin xxlText {
+	font-size: 5rem;
+	line-height: 1.1em;
+}
+
+@mixin xlText {
+	font-size: 3rem;
+	line-height: 1.2em;
+}
+
+@mixin lgText {
+	font-size: 2.5rem;
+	line-height: 1.2em;
+}
+
+@mixin mdText {
+	font-size: 1.25rem;
+	line-height: 1.2em;
+}
+
+@mixin smText {
+	font-size: 15px;
+	line-height: 1.2em;
+}
+
+@mixin xsText {
+	font-size: 1.03rem;
+	line-height: 18px;
+}
+
+@mixin xl {
+	@media (max-width: 1290px) {
+		@content;
+	}
+}
+
+@mixin lg {
+	@media (max-width: 1024px) {
+		@content;
+	}
+}
+
+@mixin md {
+	@media (max-width: 667px) {
+		@content;
+	}
+}
+
+@mixin sm {
+	@media (max-width: 575px) {
+		@content;
+	}
+}
+
+@mixin underline($back: $light, $line: $cool) {
+	text-decoration: none;
+	background-image: linear-gradient($back 50%, $line 50%);
+	background-position: 0 100%;
+	background-repeat: repeat-x;
+  background-size: .15em .15em;
+  text-shadow:
+    .03em .03em $back,
+    .03em -.03em $back,
+    -.03em .03em $back,
+    -.03em -.03em $back;
+}
+
+@mixin hide {
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+
+@mixin show {
+	position: unset !important;
+	top: unset !important;
+	left: unset !important;
+}
