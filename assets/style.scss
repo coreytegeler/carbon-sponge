@@ -28,22 +28,24 @@ h1, h2, h3, h4, h5 {
 }
 h1 {
 	@include xxlText;
-	@include displayBold;
+	// @include displayBold;
+	font-weight: 900;
 	@include md {
 		@include xlText;
 	}
 }
 h2 {
 	@include xlText;
-	@include displayReg;
+	// @include displayBold;
+	font-weight: 900;
 	@include md {
 		@include lgText;
 	}
 }
 h3 {
 	@include lgText;
-	@include displayReg;
-	font-weight: normal;
+	// @include displayReg;
+	font-weight: 900;
 }
 h4 {
 	@include mdText;
@@ -109,15 +111,30 @@ section {
 	margin: 5rem auto 10rem auto;
 	padding: 2rem;
 	border: 1rem inset black;
+	// background-color: wheat;
+	// &:nth-child(4n+1) {
+	// 	transform: rotate(2deg);
+	// }
+	// &:nth-child(4n+2) {
+	// 	transform: rotate(-1deg);
+	// }
+	// &:nth-child(4n+3) {
+	// 	transform: rotate(1deg);
+	// }
+	// &:nth-child(4n+4) {
+	// 	transform: rotate(-2deg);
+	// }
 }
-.bed-title {
+.graph-title {
 	text-align: center;
 	margin: 0 0 2rem 0;
 }
-.graph-col {
+.graph.col {
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 5rem;
 }
+
 .graph-title {
 	text-align: center;
 }
@@ -137,9 +154,54 @@ svg {
 	left: 0;
 	top: 0;
 	display: inline-block;
-	pointer-events: none;
+	// pointer-events: none;
 	.area {
 	  fill: black;
-	  // clip-path: url(#clip);
+	  clip-path: url(#clip);
 	}
+}
+.graph {
+	&.microbiometer {
+		svg .area {
+			fill: $microbiometer;
+		}
+	}
+	&.brix {
+		svg .area {
+			fill: $brix;
+		}
+	}
+	&.ph {
+		svg .area {
+			fill: $ph;
+		}
+	}
+	&.temperature {
+		svg .area {
+			fill: $temperature;
+		}
+	}
+	&.moisture {
+		svg .area {
+			fill: $moisture;
+		}
+	}
+	&.nodules {
+		svg .area {
+			fill: $nodules;
+		}
+	}
+	&.rhizosheaths {
+		svg .area {
+			fill: $rhizosheaths;
+		}
+	}
+}
+.buttons-wrapper {
+	display: flex;
+	justify-content: center;
+}
+.button {
+	margin: .5rem 1rem;
+	font-weight: 900;
 }

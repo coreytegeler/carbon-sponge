@@ -1,4 +1,4 @@
-// @import url(https://fonts.googleapis.com/css?family=Oswald:400,700&subset=latin-ext);
+@import url(https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i,900,900i&display=swap);
 $highlight: #f6d465;
 $highdark: #d9a90d;
 $lightest: white;
@@ -11,12 +11,21 @@ $dark: black;
 $warm: tomato;
 $cool: cornflowerblue;
 
+
+$microbiometer: #638a77;
+$brix: #a9cf81;
+$ph: #404275;
+$temperature: #e0a850;
+$moisture: #6d9ad1;
+$nodules: #dba193;
+$rhizosheaths: #b43927;
+
 // wheat
 // tomato
 // plum
 // cornsilk
 
-$displayFont: 'Oswald', sans-serif;
+// $displayFont: "Nunito", sans-serif;
 
 @mixin displayReg {
 	font-family: $displayFont;
