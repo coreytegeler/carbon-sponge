@@ -282,7 +282,7 @@ function getData(sheetName) {
 function initMap() {
 	// for(var i = 0; i < 2; i++) {
 		// d3.xml("/assets/map"+(i+1)+".svg", function(data) {
-	d3.xml("/assets/map.svg", function(data) {
+	d3.xml("./assets/map.svg", function(data) {
 		var mapWrap = d3.select("#beds-map")
 				svg = data.documentElement;
 		mapWrap
