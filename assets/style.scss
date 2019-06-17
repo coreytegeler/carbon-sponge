@@ -7,8 +7,8 @@ html, body {
 	height: 100%;
 	margin: 0;
 	background: $lightest;
-	color: $dark;
-	font-family: sans-serif;
+	color: $darkest;
+	font-family: times, serif;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
@@ -29,7 +29,7 @@ h1, h2, h3, h4, h5 {
 h1 {
 	@include xxlText;
 	// @include displayBold;
-	font-weight: 900;
+	font-weight: normal;
 	@include md {
 		@include xlText;
 	}
@@ -37,7 +37,7 @@ h1 {
 h2 {
 	@include xlText;
 	// @include displayBold;
-	font-weight: 900;
+	font-weight: normal;
 	@include md {
 		@include lgText;
 	}
@@ -45,7 +45,7 @@ h2 {
 h3 {
 	@include lgText;
 	// @include displayReg;
-	font-weight: 900;
+	font-weight: normal;
 }
 h4 {
 	@include mdText;
@@ -57,13 +57,13 @@ h5 {
 }
 
 a, a:hover, a:visited {
-	@include underline($light, $cool);
-	color: $dark;
+	@include underline($lightest, $highlight);
+	color: $darkest;
 }
 a:hover {
-	@include underline($light, $warm);
+	@include underline($lightest, $highlight);
 	&.cool, &.warm {
-		color: $dark !important;
+		color: $darkest !important;
 	}
 }
 
@@ -101,40 +101,185 @@ li {
 	margin: 0 0 1rem 0;
 }
 
-header {
-	padding: 1rem;
+header#header {
+	padding: 60px;
+}
+
+#logo {
+	h1.logo {
+		height: 75px;
+		margin: 0;
+		display: inline-block;
+		line-height: 0;
+	}
+	a {
+		background: none;
+	}
+	img {
+		width: auto;
+		height: 100%;
+	}
+}
+
+#beds-nav {
+	
+}
+
+#intro-text {
+	font-size: 2vw;	
+	line-height: 1.2em;
+	em:hover {
+		opacity: .5;
+		cursor: help;
+	}
+	@include lg {
+		@include lgText;
+	}
+}
+
+#beds-map {
+	// width: 100%;
+	position: relative;
+	svg {
+		width: 100%;
+		height: auto;
+		opacity: 0;
+		transition: opacity 200ms ease-in-out;
+		&.show {
+			opacity: 1;
+		}
+		#beds {
+			polygon {
+				fill: $lightest;
+			}
+			> g {
+				&:hover {
+					cursor: pointer;
+					polygon:last-child {
+						fill: $darkest;
+					}
+				}
+			}
+		}
+	}
+	.bed-label {
+		display: none;
+		background-color: $darkest;
+		color: $lightest;
+		padding: .125em .25em;
+		position: absolute;
+		pointer-events: none;
+		&.show {
+			display: block;
+		}
+	}
+}
+
+main {
+	padding: 60px;
+}
+
+#tests-info {
+	width: 100vw;
+	height: 70vh;
+	margin: 8rem 0;
+	position: relative;
+	.oval {
+		display: none;
+		width: 80%;
+		height: 80%;
+		position: absolute;
+		left: 10%;
+		top: 10%;
+		border: .25rem solid rgba($darkest,.25);
+		border-radius: 100%;
+	}
+}
+.test-block {
+	position: absolute;
+	.test-title {
+		font-style: italic;
+	}
+	&.microbiometer {
+		left: 18%;
+    top: 10vh;
+	}
+	&.brix {
+		left: 50%;
+		top: 4vh;
+	}
+	&.ph {
+		right: 25%;
+		top: 8vh;
+	}
+	&.temperature {
+		left: 25%;
+		bottom: 5vh;
+	}
+	&.moisture {
+		right: 25%;
+		bottom: 6vh;
+	}
+	&.nodules {
+		right: 7%;
+		top: 25vh;
+	}
+	&.rhizosheaths {
+		left: 5%;
+		top: 40vh;
+	}
+	&#tests-title {
+		width: 100%;
+		left: 0;
+    top: 30vh;
+    text-align: center;
+    pointer-events: none;
+	}
 }
 
  //graph
 section {
-	width: calc(100% - 10rem);
-	margin: 5rem auto 10rem auto;
-	padding: 2rem;
-	border: 1rem inset black;
-	// background-color: wheat;
-	// &:nth-child(4n+1) {
-	// 	transform: rotate(2deg);
-	// }
-	// &:nth-child(4n+2) {
-	// 	transform: rotate(-1deg);
-	// }
-	// &:nth-child(4n+3) {
-	// 	transform: rotate(1deg);
-	// }
-	// &:nth-child(4n+4) {
-	// 	transform: rotate(-2deg);
-	// }
+	width: 100%;
+	margin: 5rem auto 1rem auto;
+	padding: 4rem 0;
+	border-top: .5rem solid $darkest;
+	position: absolute;
+	left: -9999999px;
+	opacity: 0;
+	&.show {
+		position: unset;
+		left: unset;
+		opacity: 1;
+	}
 }
-.graph-title {
+.section-title {
+	text-align: center;
+	margin: 0 0 2rem 0;
+
+	&::before {
+		content: 'Bed No. ';
+	}
+}
+
+.graphs-wrapper {
+	.test {
+		margin: 2rem 0 8rem 0;
+	}
+}
+
+.test-title {
 	text-align: center;
 	margin: 0 0 2rem 0;
 }
-.graph.col {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 5rem;
+.test-about {
+	margin: 2rem 0 0 0;
+	@include mdText;
 }
-
+// .graph.col {
+// 	display: flex;
+// 	flex-direction: column;
+// 	margin-bottom: 5rem;
+// }
 .graph-title {
 	text-align: center;
 }
@@ -142,25 +287,25 @@ section {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	padding-bottom: 60%;
+	padding-bottom: 80%;
 	display: inline-block;
   vertical-align: top;
   overflow: hidden;
 }
-svg {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	display: inline-block;
-	// pointer-events: none;
-	.area {
-	  fill: black;
-	  clip-path: url(#clip);
+.test {
+	svg {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: inline-block;
+		// pointer-events: none;
+		.area {
+		  fill: black;
+		  clip-path: url(#clip);
+		}
 	}
-}
-.graph {
 	&.microbiometer {
 		svg .area {
 			fill: $microbiometer;
@@ -203,5 +348,5 @@ svg {
 }
 .button {
 	margin: .5rem 1rem;
-	font-weight: 900;
+	// font-weight: 900;
 }
