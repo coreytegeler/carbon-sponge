@@ -1,214 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="1713.113px" height="811.459px" viewBox="-24.619 -62.522 1713.113 811.459"
-	 enable-background="new -24.619 -62.522 1713.113 811.459" xml:space="preserve">
+<svg version="1.1" id="beds-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="1056.105px" height="596.044px" viewBox="0 0 1056.105 596.044" enable-background="new 0 0 1056.105 596.044"
+	 xml:space="preserve">
 <g id="beds">
-	<g id="bed-24">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1585.626,-27.34 1603.354,46.938 
-				1547.889,99.433 1474.707,77.648 1456.975,3.367 1512.442,-49.127 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1573.69,-16.048 1587.603,42.248 
-				1544.075,83.446 1486.644,66.354 1472.728,8.052 1516.257,-33.14 			"/>
-		</g>
-	</g>
-	<g id="bed-23">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1432.748,9.146 1450.47,83.425 
-				1395.015,135.919 1321.821,114.139 1304.099,39.854 1359.556,-12.64 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1420.815,20.445 1434.725,78.737 
-				1391.196,119.932 1333.76,102.843 1319.849,44.546 1363.373,3.347 			"/>
-		</g>
-	</g>
-	<g id="bed-22">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1125.813,82.405 1143.537,156.679 
-				1088.074,209.174 1014.884,187.389 997.158,113.112 1052.622,60.619 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1113.876,93.699 1127.785,151.989 
-				1084.26,193.187 1026.818,176.093 1012.911,117.799 1056.438,76.604 			"/>
-		</g>
-	</g>
-	<g id="bed-21">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="972.93,118.894 990.657,193.169 
-				935.193,245.657 862.009,223.873 844.276,149.605 899.742,97.108 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="960.996,130.186 974.905,188.479 
-				931.38,229.671 873.941,212.576 860.03,154.292 903.559,113.095 			"/>
-		</g>
-	</g>
 	<g id="bed-20">
 		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1540.611,122.569 1558.339,196.843 
-				1502.874,249.336 1429.686,227.549 1411.961,153.273 1467.426,100.783 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1528.677,133.866 1542.587,192.155 
-				1499.061,233.351 1441.623,216.251 1427.712,157.961 1471.24,116.771 			"/>
-		</g>
-	</g>
-	<g id="bed-19">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1080.796,232.312 1098.521,306.59 
-				1043.062,359.083 969.874,337.297 952.144,263.02 1007.606,210.527 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1068.858,243.609 1082.771,301.902 
-				1039.246,343.099 981.81,326.001 967.894,267.708 1011.42,226.515 			"/>
-		</g>
-	</g>
-	<g id="bed-18">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1494.462,272.941 1512.181,347.217 
-				1456.721,399.709 1383.534,377.923 1365.808,303.642 1421.268,251.15 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1482.525,284.236 1496.435,342.524 
-				1452.906,383.724 1395.472,366.626 1381.557,308.333 1425.085,267.135 			"/>
-		</g>
-	</g>
-	<g id="bed-17">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1341.583,309.425 1359.312,383.702 
-				1303.847,436.198 1230.655,414.411 1212.931,340.134 1268.394,287.643 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1329.649,320.722 1343.56,379.016 
-				1300.031,420.215 1242.595,403.114 1228.681,344.823 1272.207,303.627 			"/>
-		</g>
-	</g>
-	<g id="bed-16">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1188.703,345.914 1206.428,420.192 
-				1150.968,472.684 1077.773,450.898 1060.051,376.616 1115.511,324.132 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1176.768,357.211 1190.679,415.503 
-				1147.152,456.699 1089.713,439.603 1075.803,381.306 1119.327,340.119 			"/>
-		</g>
-	</g>
-	<g id="bed-15">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1296.563,459.336 1314.293,533.611 
-				1258.832,586.104 1185.641,564.32 1167.914,490.044 1223.374,437.554 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1284.629,470.633 1298.542,528.923 
-				1255.019,570.118 1197.58,553.025 1183.668,494.732 1227.189,453.537 			"/>
-		</g>
-	</g>
-	<g id="bed-14">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1449.441,422.847 1467.175,497.126 
-				1411.712,549.617 1338.52,527.832 1320.791,453.555 1376.254,401.064 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1437.508,434.146 1451.421,492.439 
-				1407.895,533.632 1350.455,516.536 1336.541,458.243 1380.069,417.055 			"/>
-		</g>
-	</g>
-	<g id="bed-13">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1404.018,572.155 1421.739,646.437 
-				1366.275,698.928 1293.091,677.141 1275.366,602.864 1330.823,550.37 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="1392.079,583.454 1405.991,641.746 
-				1362.463,682.942 1305.027,665.848 1291.114,607.552 1334.64,566.355 			"/>
-		</g>
-	</g>
-	<g id="bed-1">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="429.818,68.041 449.218,-5.82 
-				522.88,-25.954 577.143,27.77 557.75,101.631 484.089,121.768 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="445.675,63.709 460.894,5.742 
-				518.706,-10.059 561.291,32.104 546.069,90.066 488.263,105.871 			"/>
-		</g>
-	</g>
-	<g id="bed-2">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="319.353,178.283 338.745,104.42 
-				412.405,84.288 466.674,138.013 447.279,211.873 373.619,232.004 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="335.204,173.947 350.426,115.983 
-				408.232,100.184 450.822,142.347 435.602,200.31 377.794,216.107 			"/>
-		</g>
-	</g>
-	<g id="bed-3">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="471.37,218.2 490.763,144.341 
-				564.424,124.204 618.694,177.929 599.298,251.787 525.639,271.922 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="487.221,213.865 502.444,155.902 
-				560.25,140.102 602.842,182.261 587.621,240.226 529.811,256.027 			"/>
-		</g>
-	</g>
-	<g id="bed-4">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="512.997,369.08 532.395,295.222 
-				606.054,275.088 660.327,328.813 640.925,402.676 567.267,422.804 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="528.852,364.747 544.074,306.785 
-				601.881,290.983 644.472,333.146 629.25,391.113 571.442,406.909 			"/>
-		</g>
-	</g>
-	<g id="bed-5">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="360.98,329.167 380.374,255.304 
-				454.037,235.17 508.305,288.896 488.908,362.752 415.248,382.889 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="376.83,324.833 392.053,266.869 
-				449.865,251.064 492.451,293.229 477.23,351.192 419.422,366.995 			"/>
-		</g>
-	</g>
-	<g id="bed-6">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="208.961,289.248 228.36,215.392 
-				302.021,195.255 356.285,248.979 336.889,322.843 263.23,342.979 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="224.812,284.913 240.04,226.955 
-				297.848,211.149 340.431,253.312 325.213,311.279 267.402,327.08 			"/>
-		</g>
-	</g>
-	<g id="bed-7">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="554.584,520.148 573.979,446.285 
-				647.641,426.148 701.906,479.873 682.513,553.737 608.853,573.872 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="570.437,515.814 585.659,457.848 
-				643.467,442.045 686.056,484.206 670.831,542.174 613.025,557.973 			"/>
-		</g>
-	</g>
-	<g id="bed-8">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="97.354,400.086 116.746,326.229 
-				190.411,306.094 244.675,359.821 225.28,433.678 151.62,453.809 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="113.204,395.751 128.428,337.79 
-				186.236,321.988 228.823,364.153 213.602,422.113 155.792,437.914 			"/>
-		</g>
-	</g>
-	<g id="bed-9">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="-13.036,511.054 6.36,437.188 
-				80.026,417.055 134.285,470.775 114.893,544.643 41.228,564.775 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="2.816,506.723 18.039,448.755 
-				75.851,432.954 118.436,475.107 103.213,533.081 45.405,548.878 			"/>
-		</g>
-	</g>
-	<g id="bed-10">
-		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="138.983,550.97 158.38,477.11 
-				232.043,456.972 286.312,510.695 266.913,584.56 193.251,604.696 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="154.835,546.635 170.059,488.67 
-				227.869,472.869 270.46,515.023 255.235,572.992 197.426,588.798 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="461.825,189.89 438.971,221.647 
+				400.04,217.733 383.963,182.062 406.819,150.305 445.75,154.219 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="453.448,189.047 435.51,213.97 
+				404.958,210.899 392.342,182.904 410.28,157.981 440.831,161.055 			"/>
 		</g>
 	</g>
 	<g id="bed-11">
 		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="444.193,631.108 463.588,557.254 
-				537.253,537.119 591.523,590.843 572.127,664.702 498.463,684.835 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="460.044,626.78 475.267,568.821 
-				533.082,553.014 575.67,595.177 560.447,653.139 502.638,668.941 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="580.818,249.935 568.416,287.043 
+				530.076,294.855 504.141,265.559 516.545,228.452 554.885,220.639 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="572.568,251.617 562.834,280.74 
+				532.744,286.871 512.393,263.878 522.127,234.755 552.215,228.625 			"/>
 		</g>
 	</g>
-	<g id="bed-12">
+	<g id="bed-10">
 		<g>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="596.215,671.028 615.609,597.17 
-				689.272,577.04 743.539,630.763 724.148,704.615 650.483,724.755 			"/>
-			<polygon fill="none" stroke="#000000" stroke-width="7.1161" stroke-miterlimit="10" points="612.067,666.699 627.289,608.732 
-				685.097,592.936 727.686,635.098 712.467,693.055 654.659,708.854 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="380.674,303.668 361.641,337.852 
+				322.516,338.459 302.428,304.886 321.463,270.701 360.586,270.091 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="372.254,303.798 357.317,330.627 
+				326.614,331.105 310.848,304.753 325.786,277.925 356.489,277.451 			"/>
 		</g>
 	</g>
-</g>
-<g id="rhizotron_1_">
-	<g id="rhizotron">
+	<g id="bed-1">
 		<g>
-			<circle fill="#FFFFFF" stroke="#231F20" stroke-width="7.1161" stroke-miterlimit="10" cx="1530.165" cy="25.153" r="30.292"/>
-			<g>
-				<path fill="#231F20" d="M1513.548,24.247l2.312-7.141c5.328,1.876,9.201,3.505,11.613,4.878
-					c-0.639-6.068-0.969-10.241-1.006-12.521h7.289c-0.104,3.317-0.486,7.479-1.154,12.471c3.455-1.744,7.404-3.354,11.865-4.828
-					l2.312,7.141c-4.258,1.409-8.43,2.35-12.52,2.815c2.047,1.772,4.928,4.941,8.646,9.502l-6.033,4.273
-					c-1.945-2.648-4.236-6.25-6.891-10.81c-2.479,4.726-4.66,8.33-6.535,10.81l-5.932-4.273c3.887-4.792,6.67-7.96,8.348-9.502
-					C1521.542,26.224,1517.434,25.289,1513.548,24.247z"/>
-			</g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="328.965,168.874 295.934,189.843 
+				261.255,171.72 259.613,132.628 292.646,111.66 327.323,129.783 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="321.502,164.974 295.58,181.43 
+				268.365,167.207 267.074,136.529 292.999,120.072 320.211,134.297 			"/>
+		</g>
+	</g>
+	<g id="bed-2">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="251.983,173.389 218.951,194.358 
+				184.273,176.234 182.628,137.143 215.663,116.174 250.338,134.297 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="244.52,169.488 218.596,185.945 
+				191.381,171.723 190.091,141.043 216.015,124.587 243.229,138.811 			"/>
+		</g>
+	</g>
+	<g id="bed-4">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="117.792,145.321 84.761,166.29 
+				50.083,148.166 48.439,109.075 81.472,88.106 116.149,106.229 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="110.329,141.42 84.407,157.877 
+				57.191,143.654 55.902,112.976 81.824,96.519 109.038,110.744 			"/>
+		</g>
+	</g>
+	<g id="bed-6">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="107.624,259.41 93.653,295.957 
+				55.015,302.13 30.35,271.757 44.322,235.211 82.958,229.038 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="99.308,260.738 88.345,289.418 
+				58.022,294.266 38.665,270.43 49.629,241.749 79.951,236.905 			"/>
+		</g>
+	</g>
+	<g id="bed-7">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="120.019,334.393 106.048,370.941 
+				67.41,377.115 42.745,346.742 56.718,310.195 95.354,304.021 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="111.704,335.722 100.74,364.403 
+				70.417,369.25 51.06,345.414 62.024,316.732 92.347,311.888 			"/>
+		</g>
+	</g>
+	<g id="bed-8">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="131.887,408.814 117.916,445.36 
+				79.278,451.534 54.613,421.162 68.584,384.617 107.221,378.442 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="123.571,410.143 112.608,438.824 
+				82.283,443.669 62.928,419.834 73.892,391.152 104.214,386.308 			"/>
+		</g>
+	</g>
+	<g id="bed-9">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="202.039,435.916 188.069,472.462 
+				149.431,478.636 124.766,448.263 138.738,411.716 177.374,405.543 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="193.724,437.244 182.76,465.925 
+				152.438,470.772 133.081,446.935 144.045,418.252 174.367,413.412 			"/>
+		</g>
+	</g>
+	<g id="bed-5">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="152.449,79.628 119.417,100.598 
+				84.739,82.474 83.096,43.383 116.129,22.414 150.805,40.537 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="144.986,75.728 119.063,92.185 
+				91.848,77.962 90.558,47.283 116.482,30.827 143.695,45.051 			"/>
+		</g>
+	</g>
+	<g id="bed-3">
+		<g>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="287.121,105.342 254.089,126.312 
+				219.411,108.188 217.768,69.097 250.801,48.128 285.478,66.251 			"/>
+			<polygon fill="none" stroke="#000000" stroke-width="3.6462" stroke-miterlimit="10" points="279.658,101.442 253.735,117.898 
+				226.52,103.676 225.23,72.998 251.154,56.54 278.367,70.765 			"/>
 		</g>
 	</g>
 </g>
