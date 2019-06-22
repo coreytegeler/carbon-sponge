@@ -7,23 +7,38 @@ var SPREADSHEET_ID = "1RjOpiMjIEZ2_NCrAMBqCSFj-3sYQu8NHhI1FsLYStjA";
 var body = document.body;
 
 var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Temperature', 'Moisture', 'Nodules', 'Rhizosheaths'],
+		lineTestNames = ['Brix', 'pH', 'Moisture', 'Nodules', 'Rhizosheaths'];
+		barTestNames = ['MicroBIOMETER'];
 		tests = {},
 		beds = {},
 		graphs = {},
-		averages = {};
+		averages = {},
+		margin = {top: 30, right: 30, bottom: 30, left: 40};
 
 
 function Bed(bedId) {
 	this.id = bedId;
-	this.graphs = {};
+	this.tests = {};
+	this.graph = null;
+	this.container = null;
 	beds[bedId] = this;
 }
 
-function Graph(testName) {
+function Graph(bedId) {
+	this.lines = [];
+	this.bars = [];
+	var graph = this;
+	var bed = beds[bedId];
+	graph.createGraph(bed);
+	graphs[bedId] = graph;
+}
+
+function Test(testName) {
 	var testId = slugify(testName);
 	this.id = testId;
 	this.name = testName;
-	graphs[testId] = this;
+	this.data = [];
+	tests[testId] = this;
 }
 
 function initMap() {
@@ -47,8 +62,7 @@ function initMap() {
 
 			mapWrap
 				.append("div")
-					.attr("data-bed-id", bedId)
-					.attr("class", "bed-label")
+					.attr("class", "label bed-label "+bedId)
 				.append("span")
 					.text(labelText);
 			// var wait = Math.random() * 100;
@@ -73,7 +87,7 @@ function initMap() {
 			} else {
 				testNames.forEach(function(testName) {
 					var testId = slugify(testName);
-					bed.graphs[testId].createGraph();
+					
 				});
 				bedsSection = d3.select("section#sect-"+bedId);
 			}
@@ -85,22 +99,19 @@ function initMap() {
 			// window.scrollTo(0, scrollTop);
 
 		});
-				
 		hexagons.on("mouseover", function(e) {
 			var mapWrap = d3.select("#beds-map"),
 					hexagon = this,
 					bedId = hexagon.id,
-					label = mapWrap.select("[data-bed-id='"+bedId+"']");
+					label = mapWrap.select(".label."+bedId);
 			label.classed("show", true);
-			// hexagon.style('fill', 'red');
 		});
 
 		hexagons.on("mousemove", function(e) {
 			var mapWrap = d3.select("#beds-map"),
 					hexagon = this,
 					bedId = hexagon.id,
-					label = mapWrap.select("[data-bed-id='"+bedId+"']");
-			
+					label = mapWrap.select(".label."+bedId);
 			var mouse = d3.mouse(hexagon),
 					x = mouse[0],
 					y = mouse[1],
@@ -114,96 +125,130 @@ function initMap() {
 			var mapWrap = d3.select("#beds-map"),
 					hexagon = this,
 					bedId = hexagon.id,
-					label = mapWrap.select("[data-bed-id='"+bedId+"']");
-			
+					label = mapWrap.select(".label."+bedId);
 			label.classed("show", false);
 		});
 	});
 	// }
 }
 
-Bed.prototype.buildBed = function() {
-	var bed = this,
-			bedId = bed.id;
+Graph.prototype.addLine = function(bed, testName, graphWrap) {
+	var graph = this,
+			testId = slugify(testName),
+			testData = bed.tests[testId].data;
+	var svg = graph.svg,
+			width = svg.attr("width"),
+			height = svg.attr("height");
 
-	var bedsSection = d3.select("#graphs-list")
-		.append("section")
-			.attr("class", "bed")
-			.attr("id", "sect-"+bedId);			
-	bedsSection.append("h2")
-		.attr("class", "section-title")
-		.text(bed.id);
+	var g = svg.select(".features")
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var graphsWrap = bedsSection
-		.append("div")
-		.attr("class", "graphs-wrapper");
+	var x = d3.scaleTime().range([0, width]),
+			y = d3.scaleLinear().range([height, 0]);
+	x.domain(d3.extent(bed.lineData, function(d) { return d.date; }));
+	y.domain([0, d3.max(bed.lineData, function(d) { return d.value; })]);
 
-	testNames.forEach(function(testName) {
-		var testId = slugify(testName),
-				testData = tests[testId],
-				test = bed.graphs[testId];
+	var line = d3.line()
+		.curve(d3.curveCatmullRom)
+		// .curve(d3.curveStepBefore)
+		// .curve(d3.curveStepAfter)
+		// .curve(d3.curveStep)
+		// .curve(d3.curveLinear)
+		.x(function(d) { return x(d.date); })
+		// .y0(height)
+		.y(function(d) { return y(d.value); });
 
-		var testRow = graphsWrap.append("div")
-				.attr("class", "test row "+testId);
+	g.append("path")
+		.datum(testData)
+		.attr("class", "line "+testId)
+		.attr("data-test", testId)
+		.attr("id", testId+"-"+bed.id)
+		.attr("d", line);
 
-		var testGraph = testRow.append("div")
-			.attr("class", "test-graph col col-12 col-md-6");
-
-		var testInfo = testRow.append("div")
-			.attr("class", "test-info col col-12 col-md-6");
-
-		testInfo.append("h3")
-			.attr("class", "test-name")
-			.text(testData.name);
-
-		testInfo.append("h4")
-			.attr("class", "test-unit")
-			.text(testData.unit);
-
-		testInfo.append("div")
-			.attr("class", "test-about")
-			.text(testData.about);
-		
-		var wrapper = testGraph.append("div")
-				.attr("class", "graph-wrapper")
-				// .append(test.graph.node());
-
-		test.graph.createGraph(bed, wrapper);
-
-	});
+	graph.lines[testId] = line;
 }
 
 
-Graph.prototype.createGraph = function(bed, wrapper) {
+Graph.prototype.addBar = function(bed, testName, graphWrap) {
 	var graph = this,
-			testId = graph.id,
-			testName = graph.name,
-			graphData = bed.graphs[testId].data,
-			testData = tests[testId];
+			testId = slugify(testName),
+			testData = bed.tests[testId].data;
+	var svg = graph.svg,
+			width = svg.attr("width"),
+			height = svg.attr("height");
 
-	var margin = {top: 20, right: 20, bottom: 30, left: 40};
-	// var wrapperWidth = wrapperNode.clientWidth,
-	// 		wrapperHeight = wrapperNode.clientHeight;
+	var g = svg.select(".features")
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var wrapperWidth = 669;
-	var wrapperHeight = 535;
 
+	var x = d3.scaleTime().range([0, width]),
+			y = d3.scaleLinear().range([height, 0]);
+	x.domain(d3.extent(bed.barData, function(d) { return d.date; }));
+	y.domain([0, d3.max(bed.barData, function(d) { return d.value; })]);
+
+
+	// var bar = d3.line()
+		// .curve(d3.curveLinear)
+		// .x(function(d) { return x(d.date); })
+		// .y0(height)
+		// .y1(function(d) { return y(d.value); });
+
+	// g.append("path")
+	// 	.datum(testData)
+	// 	.attr("class", "line "+testId)
+	// 	.attr("data-test", testId)
+	// 	.attr("id", testId+"-"+bed.id)
+	// 	.attr("d", line);
+
+	// graph.lines[testId] = line;
+}
+
+Graph.prototype.createGraph = function(bed) {
+	var graph = this;
+	var lineData = [];
+	var barData = [];
+
+	lineTestNames.forEach(function(testName) {
+		var testId = slugify(testName);
+		var test = bed.tests[testId];
+		lineData = lineData.concat(test.data);
+	});
+	bed.lineData = lineData;
+
+	barTestNames.forEach(function(testName) {
+		var testId = slugify(testName);
+		var test = bed.tests[testId];
+		barData = barData.concat(test.data);
+	});
+	bed.barData = barData;
+
+
+	var wrapperWidth = 1000,
+			wrapperHeight = 600,
+			tickSize = 15;
 
 	var width = wrapperWidth - margin.left - margin.right,
 			height = wrapperHeight - margin.top - margin.bottom;
 			
-	var svg = wrapper.append("svg")
-		.attr('id', bed.id+'-'+testId)
-		.attr('width', width)
-		.attr('height', height)
-		.attr("preserveAspectRatio", "xMinYMin meet")
-		.attr("viewBox", "0 0 "+wrapperWidth+" "+wrapperHeight );
+	var svg = bed.container.select(".bed-graph")
+			.append("svg")
+				.attr('id', bed.id+'-compare')
+				.attr('width', width)
+				.attr('height', height)
+				.attr("preserveAspectRatio", "xMinYMin meet")
+				.attr("viewBox", "0 0 "+wrapperWidth+" "+wrapperHeight );
+
+	graph.svg = svg;
 
 	var x = d3.scaleTime().range([0, width]),
-			y = d3.scaleLinear().range([height, 0]);
+			y = d3.scaleLinear().range([height, 0]),
+			y2 = d3.scaleLinear().range([height, 0]);;
 
-	var xAxis = d3.axisBottom(x),
-			yAxis = d3.axisLeft(y);
+	var xAxis = d3.axisBottom(x).tickSize(tickSize,0),
+			yAxis = d3.axisLeft(y).tickSize(tickSize,0);
+			y2Axis = d3.axisRight(y2).tickSize(tickSize,0);
 
 	var zoom = d3.zoom()
 			.scaleExtent([1, 32])
@@ -212,72 +257,163 @@ Graph.prototype.createGraph = function(bed, wrapper) {
 			.on("zoom", function() {
 				var t = d3.event.transform,
 						xt = t.rescaleX(x);
-				g.select(".area").attr("d", area.x(function(d) {
-					return xt(d.date);
-				}));
-				g.select(".axis--x").call(xAxis.scale(xt));
+				svg.selectAll(".line").each(function(data,i) {
+					var path = d3.select(svg.selectAll(".line").nodes()[i]);
+					var testId = path.attr("data-test");
+					var line = graph.lines[testId];
+					path.attr("d", line.x(function(d) {
+						return xt(d.date);
+					}));
+				});
+				svg.select(".axis--x").call(xAxis.scale(xt));
 			});
 
-	var area = d3.area()
-			// .curve(d3.curveCatmullRom)
-			.curve(d3.curveLinear)
-			// .curve(d3.curveStepBefore)
-			// .curve(d3.curveStepAfter)
-			// .curve(d3.curveStep)
-			.x(function(d) { return x(d.date); })
-			.y0(height)
-			.y1(function(d) { return y(d.value); });
+	x.domain(d3.extent(lineData, function(d) { return d.date; }));
+	y.domain([0, d3.max(lineData, function(d) { return d.value; })]);
+	y2.domain([0, d3.max(barData, function(d) { return d.value; })]);
+
+	var features = svg.append("g")
+			.attr("class", "features");
+
+	lineTestNames.forEach(function(testName) {
+		graph.addLine(bed, testName);
+	});
+
+	barTestNames.forEach(function(testName) {
+		graph.addBar(bed, testName);
+	});
+
+	var axes = svg.append("g")
+			.attr("class", "axes")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	axes.append("g")
+			.attr("class", "axis axis--x")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis);
+
+	axes.append("g")
+			.attr("class", "axis axis--y")
+			.call(yAxis);
+
+	axes.append("g")
+			.attr("class", "axis axis--y2")
+			.attr("transform", "translate(" + width + ",0)")
+			.call(y2Axis);
 
 	svg.append("defs").append("clipPath")
 			.attr("id", "clip")
 		.append("rect")
 			.attr("width", width)
-			.attr("height", height);
-
-	var g = svg.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
-	x.domain(d3.extent(graphData, function(d) { return d.date; }));
-	y.domain([0, d3.max(graphData, function(d) { return d.value; })]);
-
-	g.append("path")
-			.datum(graphData)
-			.attr("class", "area")
-			.attr("d", area);
-
-	g.append("g")
-			.attr("class", "axis axis--x")
-			.attr("transform", "translate(0," + height + ")")
-			.call(xAxis);
-
-	g.append("g")
-			.attr("class", "axis axis--y")
-			.call(yAxis);
+			.attr("height", height+20)
+			.attr("transform", "translate(0,-20)");
 
 	svg.call(zoom);
-
-	graph.svg = svg;
-
-	// var buttonsWrapper = testGraph.append("div")
-	// 	.attr("class", "buttons-wrapper");
-
-	// var averageToggle = buttonsWrapper.append("div")
-	// 	.attr("class", "button toggle average-toggle")
-	// 	.text("Compare to average");
-
-	// var downloadButton = buttonsWrapper.append("div")
-	// 	.attr('href', '#')
-	// 	.attr("class", "button toggle download-data")
-	// 	.text("Download data");
 }
 
-Graph.prototype.addGraph = function() {
+Bed.prototype.buildBed = function() {
+	var bed = this,
+			bedId = bed.id;
 
-	bedsSection.classed("show", true);
-}
+	var bedsSection = d3.select("#beds-list")
+			.append("section")
+				.attr("class", "bed")
+				.attr("id", "sect-"+bedId);
 
+	bedsSection.append("h2")
+		.attr("class", "section-title")
+		.text(bed.id);
+
+	var graphWrap = bedsSection
+			.append("div")
+			// .attr("class", "graphs-wrapper");
+			.attr("class", "graph-wrapper row");
+
+	var testGraph = graphWrap.append("div")
+			.attr("class", "bed-graph col col-12 col-md-9");
+
+	var testInfo = graphWrap.append("div")
+			.attr("class", "bed-graph-info col col-12 col-md-3");
+
+	bed.container = bedsSection;
+	bed.graph = new Graph(bedId);
+
+	testNames.forEach(function(testName, i) {
+		var testId = slugify(testName);
+
+		testGraph
+			.append("div")
+				.attr("data-test", testId)
+				.attr("class", "label bed-label "+testId)
+			.append("span")
+				.text(testName);
+
+		var filter = testInfo
+			.append("div")
+				.attr("data-test", testId)
+				.attr("class", "button filter-button "+testId)
+		filter
+			.append("span")
+				.text(testName);
+
+		filter.on("mouseover", function() {
+			var filter = this,
+					testId = filter.dataset.test,
+					line = testGraph.select(".line."+testId);
+			if(line.empty()) {return}
+			var parent = line.node().parentNode;
+			parent.parentNode.appendChild(parent);
+			line.classed("hover", true);
+			svg.classed("hover", true);
+		});
+
+		filter.on("mouseleave", function() {
+			var filter = this,
+					testId = filter.dataset.test,
+					line = testGraph.select(".line."+testId);
+			if(line.empty()) {return}
+			line.classed("hover", false);
+			svg.classed("hover", false);
+		});
+
+
+	});
+	var svg = bed.graph.svg,
+			lines = svg.selectAll(".line");
+
+	lines.on("mouseover", function(e) {
+		var line = this,
+				testId = line.dataset.test,
+				label = testGraph.select(".label."+testId);
+
+		var parent = line.parentNode;
+		parent.parentNode.appendChild(parent);
+		label.classed("show", true);
+		svg.classed("hover", true);
+		// hexagon.style('fill', 'red');
+	});
+
+	lines.on("mousemove", function(e) {
+		var line = this,
+				testId = line.dataset.test,
+				label = testGraph.select(".label."+testId);
+		var mouse = d3.mouse(line),
+				x = mouse[0],
+				y = mouse[1],
+				left = d3.event.pageX - testGraph.node().getBoundingClientRect().x + 15,
+				top = d3.event.pageY - testGraph.node().getBoundingClientRect().y - window.scrollY;
+
+		label.attr("style", "left:"+left+"px; top:"+top+"px;")
+	});
+
+	lines.on("mouseleave", function(e) {
+		var line = this,
+				testId = line.dataset.test,
+				label = testGraph.select(".label."+testId);
+		label.classed("show", false);
+		svg.classed("hover", false);
+	});
+};
 
 function averageData(testName) {
 	var testId = slugify(testName),
@@ -311,45 +447,32 @@ function averageData(testName) {
 			value: avg
 		}
 	});
-	// var graph = new Graph(testName, 'avg');
-	// graph.createGraph();
 }
 
 function handleData(resultData) {
 	testNames.forEach(function(testName, i) {
 		var testData = resultData[i].result.values,
 				testId = slugify(testName);
-
 		var parseDate = d3.timeParse("%b %Y");
 		var headers = testData.shift();
 		headers.shift();
-		testData.forEach(function(bedRowData, i) {
+		testData.forEach(function(bedRowData, j) {
 			var bedId = bedRowData.shift();
-			var bed = beds[bedId];
-			if(!bed) {
-				bed = new Bed(bedId);
-				beds[bedId] = bed;
+			if(!beds[bedId]) {
+				beds[bedId] = new Bed(bedId);
 			}
-			if(bed.graphs) {
-				bed.graphs[testId] = {
-					data: []
-				};
-			}
-			var graph = new Graph(testName);
-			bed.graphs[testId].graph = graph;
-			var test = bed.graphs[testId];
-			bedRowData.forEach(function(testValue, j) {
-				var date = new Date(headers[j]);
+			beds[bedId].tests[testId] = new Test(testName);
+			bedRowData.forEach(function(testValue, l) {
+				var date = new Date(headers[l]);
 				var value = testValue ? parseInt(testValue) : 0;
-				if(!value) {return}
+				if(!value || !date) {return}
 				var entry = {
 					date: date,
 					value: value
 				};
-				test.data.push(entry);
+				beds[bedId].tests[testId].data.push(entry);
 			});
-
-			if(Object.keys(beds[bedId].graphs).length == 7) {
+			if(Object.keys(beds[bedId].tests).length == 7) {
 				beds[bedId].buildBed();
 			}
 		});

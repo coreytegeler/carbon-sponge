@@ -143,7 +143,7 @@ header#header {
 	svg {
 		width: 100%;
 		height: auto;
-		opacity: 0;
+		// opacity: 0;
 		transition: opacity 200ms ease-in-out;
 		&.show {
 			opacity: 1;
@@ -162,17 +162,6 @@ header#header {
 			}
 		}
 	}
-	.bed-label {
-		display: none;
-		background-color: $darkest;
-		color: $lightest;
-		padding: .125em .25em;
-		position: absolute;
-		pointer-events: none;
-		&.show {
-			display: block;
-		}
-	}
 }
 
 main {
@@ -180,7 +169,6 @@ main {
 }
 
 #tests-info {
-	display: none;
 	width: 100vw;
 	height: 70vh;
 	margin: 8rem 0;
@@ -282,62 +270,65 @@ section {
 .graph-title {
 	text-align: center;
 }
-.graph-wrapper {
+.bed-graph {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	padding-bottom: 80%;
+	padding-bottom: 60%;
 	display: inline-block;
   vertical-align: top;
-  overflow: hidden;
-}
-.test {
+  overflow: visible;
 	svg {
-		width: 100%;
-		height: 100%;
+		width: calc(100% - 2rem);
+		height: auto;
 		position: absolute;
 		left: 0;
 		top: 0;
 		display: inline-block;
 		// pointer-events: none;
-		.area {
-		  fill: black;
+		.axes {
+			stroke-width: 3;
+		}
+		.line {
+		  stroke: black;
+		  stroke-width: 5;
+		  fill: transparent;
 		  clip-path: url(#clip);
+		  transition: 200ms stroke-width ease-in-out, 200ms opacity ease-in-out;
+		  &.hover, &:hover {
+		  	cursor: pointer;
+		  	stroke-width: 8;
+		  }
+			&.microbiometer {
+				stroke: $microbiometer;
+			}
+			&.brix {
+				stroke: $brix;
+			}
+			&.ph {
+				stroke: $ph;
+			}
+			&.temperature {
+				stroke: $temperature;
+			}
+			&.moisture {
+				stroke: $moisture;
+			}
+			&.nodules {
+				stroke: $nodules;
+			}
+			&.rhizosheaths {
+				stroke: $rhizosheaths;
+			}
 		}
-	}
-	&.microbiometer {
-		svg .area {
-			fill: $microbiometer;
+		&.hover {
+			.line:not(:hover):not(.hover) {
+				opacity: .5;
+			}
 		}
-	}
-	&.brix {
-		svg .area {
-			fill: $brix;
-		}
-	}
-	&.ph {
-		svg .area {
-			fill: $ph;
-		}
-	}
-	&.temperature {
-		svg .area {
-			fill: $temperature;
-		}
-	}
-	&.moisture {
-		svg .area {
-			fill: $moisture;
-		}
-	}
-	&.nodules {
-		svg .area {
-			fill: $nodules;
-		}
-	}
-	&.rhizosheaths {
-		svg .area {
-			fill: $rhizosheaths;
+		text {
+			font-weight: bold;
+			@include smText;
 		}
 	}
 }
@@ -346,6 +337,87 @@ section {
 	justify-content: center;
 }
 .button {
-	margin: .5rem 1rem;
+	// margin: .5rem 1.25rem;
 	// font-weight: 900;
+}
+.filter-button {
+	position: relative;
+	padding: .25em .25em .25em 1.25em;
+	@include lgText;
+	&::before {
+		content: '';
+		width: 1em;
+		height: 1em;
+		position: absolute;
+		left: 0;
+		top: .35em;
+		border: 5px solid;
+		margin: 0 .25em 0 0;
+		border-radius: 25%;
+	}
+	&:hover {
+		color: black;
+		cursor: pointer;
+		// font-weight: bold;
+		&::before {
+
+		}
+	}
+	&.microbiometer {
+		color: $microbiometer;
+		&:hover::before {
+			background-color: $microbiometer;	
+		}
+	}
+	&.brix {
+		color: $brix;
+		&:hover::before {
+			background-color: $brix;	
+		}
+	}
+	&.ph {
+		color: $ph;
+		&:hover::before {
+			background-color: $ph;	
+		}
+	}
+	&.temperature {
+		color: $temperature;
+		&:hover::before {
+			background-color: $temperature;	
+		}
+	}
+	&.moisture {
+		color: $moisture;
+		&:hover::before {
+			background-color: $moisture;	
+		}
+	}
+	&.nodules {
+		color: $nodules;
+		&:hover::before {
+			background-color: $nodules;	
+		}
+	}
+	&.rhizosheaths {
+		color: $rhizosheaths;
+		&:hover::before {
+			background-color: $rhizosheaths;	
+		}
+	}
+}
+
+.label {
+	display: none;
+	background-color: $darkest;
+	color: $lightest;
+	padding: .125em .25em;
+	position: absolute;
+	pointer-events: none;
+	font-family: sans-serif;
+	font-weight: bold;
+	@include mdText;
+	&.show {
+		display: block;
+	}
 }
