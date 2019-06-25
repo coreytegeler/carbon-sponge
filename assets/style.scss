@@ -57,14 +57,13 @@ h5 {
 }
 
 a, a:hover, a:visited {
-	@include underline($lightest, $highlight);
 	color: $darkest;
+	transition: all 200ms ease-in-out;
+	@include underline($lightest, $darkest);
 }
 a:hover {
-	@include underline($lightest, $highlight);
-	&.cool, &.warm {
-		color: $darkest !important;
-	}
+	color: $medium;
+	@include underline($lightest, $medium);
 }
 
 p {
@@ -129,7 +128,7 @@ header#header {
 	font-size: 2vw;	
 	line-height: 1.2em;
 	em:hover {
-		opacity: .5;
+		color: $medium;
 		cursor: help;
 	}
 	@include lg {
@@ -153,7 +152,7 @@ header#header {
 				fill: $lightest;
 			}
 			> g {
-				&:hover {
+				&:hover, &.active {
 					cursor: pointer;
 					polygon:last-child {
 						fill: $darkest;
@@ -173,6 +172,7 @@ main {
 	height: 70vh;
 	margin: 8rem 0;
 	position: relative;
+	display: none;
 	.oval {
 		display: none;
 		width: 80%;
@@ -232,11 +232,11 @@ section {
 	margin: 5rem auto 1rem auto;
 	padding: 4rem 0;
 	border-top: .5rem solid $darkest;
-	position: absolute;
 	@include hide;
 	&.show {
 		position: unset;
 		left: unset;
+		top: unset;
 	}
 }
 .section-title {
@@ -289,15 +289,46 @@ section {
 		.axes {
 			stroke-width: 3;
 		}
+		.y-axis {
+			.tick {
+				opacity: 0;
+				transition: 200ms opacity ease-in-out;
+			}
+			&.show, &.focus {
+				.tick {
+					opacity: 1;
+				}
+			}
+		}
+		&.focus {
+			.y-axis:not(.focus) {
+				opacity: 0;
+			}
+		}
 		.line {
 		  stroke: black;
 		  stroke-width: 5;
 		  fill: transparent;
 		  clip-path: url(#clip);
+		  // mix-blend-mode: darken;
+		  opacity: 0;
+		  pointer-events: none;
 		  transition: 200ms stroke-width ease-in-out, 200ms opacity ease-in-out;
 		  &.hover, &:hover {
 		  	cursor: pointer;
 		  	stroke-width: 8;
+		  	&:not(.show) {
+		  		opacity: .2;
+		  	}
+		  }
+		  &.show {
+		  	opacity: 1;
+		  	pointer-events: all;
+		  }
+		  &.focus {
+		  	opacity: 1;
+		  	stroke-width: 8;
+		  	pointer-events: all;
 		  }
 			&.microbiometer {
 				stroke: $microbiometer;
@@ -320,12 +351,20 @@ section {
 			&.rhizosheaths {
 				stroke: $rhizosheaths;
 			}
+			&.avg {
+		  	stroke: $medium;
+		  }
 		}
-		&.hover {
-			.line:not(:hover):not(.hover) {
-				opacity: .5;
-			}
-		}
+		// &.hover {
+		// 	.line:not(:hover):not(.hover) {
+		// 		opacity: 0;
+		// 	}
+		// }
+		// &.active {
+		// 	.line:not(.active):not(.hover) {
+		// 		opacity: 0;
+		// 	}
+		// }
 		text {
 			font-weight: bold;
 			@include smText;
@@ -343,6 +382,7 @@ section {
 .filter-button {
 	position: relative;
 	padding: .25em .25em .25em 1.25em;
+	display: table;
 	@include lgText;
 	&::before {
 		content: '';
@@ -355,54 +395,87 @@ section {
 		margin: 0 .25em 0 0;
 		border-radius: 25%;
 	}
+	&::after {
+		// content: 'SHOW AVG';
+		position: absolute;
+		left: 100%;
+		top: 2.125em;
+		display: table;
+		opacity: 0;
+		color: $medium;
+		font-weight: bold;
+		font-family: sans-serif;
+		transition: opacity 200ms ease-in-out;
+		@include xsText;
+		// @include hide;
+	}
 	&:hover {
-		color: black;
 		cursor: pointer;
-		// font-weight: bold;
-		&::before {
-
+		&::after {
+			opacity: 1;
 		}
 	}
 	&.microbiometer {
 		color: $microbiometer;
-		&:hover::before {
+		&.active::before {
 			background-color: $microbiometer;	
+		}
+		&:hover::before {
+			background-color: rgba($microbiometer,.2);
 		}
 	}
 	&.brix {
 		color: $brix;
-		&:hover::before {
+		&.active::before {
 			background-color: $brix;	
+		}
+		&:hover::before {
+			background-color: rgba($brix,.2);
 		}
 	}
 	&.ph {
 		color: $ph;
-		&:hover::before {
+		&.active::before {
 			background-color: $ph;	
+		}
+		&:hover::before {
+			background-color: rgba($ph,.2);
 		}
 	}
 	&.temperature {
 		color: $temperature;
-		&:hover::before {
+		&.active::before {
 			background-color: $temperature;	
+		}
+		&:hover::before {
+			background-color: rgba($temperature,.2);
 		}
 	}
 	&.moisture {
 		color: $moisture;
-		&:hover::before {
+		&.active::before {
 			background-color: $moisture;	
+		}
+		&:hover::before {
+			background-color: rgba($moisture,.2);
 		}
 	}
 	&.nodules {
 		color: $nodules;
-		&:hover::before {
+		&.active::before {
 			background-color: $nodules;	
+		}
+		&:hover::before {
+			background-color: rgba($nodules,.2);
 		}
 	}
 	&.rhizosheaths {
 		color: $rhizosheaths;
-		&:hover::before {
+		&.active::before {
 			background-color: $rhizosheaths;	
+		}
+		&:hover::before {
+			background-color: rgba($rhizosheaths,.2);
 		}
 	}
 }
@@ -419,5 +492,13 @@ section {
 	@include mdText;
 	&.show {
 		display: block;
+	}
+}
+
+.help {
+	color: $medium;
+	font-style: italic;
+	&.filter-help {
+		padding: 1rem 0 0 0;
 	}
 }

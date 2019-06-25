@@ -6,29 +6,29 @@ var SPREADSHEET_ID = "1RjOpiMjIEZ2_NCrAMBqCSFj-3sYQu8NHhI1FsLYStjA";
 
 var body = document.body;
 
-var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Temperature', 'Moisture', 'Nodules', 'Rhizosheaths'],
-		lineTestNames = ['Brix', 'pH', 'Moisture', 'Nodules', 'Rhizosheaths'];
-		barTestNames = ['MicroBIOMETER'];
+var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Nodules', 'Rhizosheaths', 'Moisture', 'Temperature'];
 		tests = {},
 		beds = {},
 		graphs = {},
 		averages = {},
-		margin = {top: 30, right: 30, bottom: 30, left: 40};
+		margin = {top: 30, right: 30, bottom: 30, left: 70};
 
 
 function Bed(bedId) {
 	this.id = bedId;
 	this.tests = {};
 	this.graph = null;
+	this.data = [];
 	this.container = null;
 	beds[bedId] = this;
 }
 
 function Graph(bedId) {
+	var graph = this,
+			bed = beds[bedId];
+	this.bed = bed;
 	this.lines = [];
 	this.bars = [];
-	var graph = this;
-	var bed = beds[bedId];
 	graph.createGraph(bed);
 	graphs[bedId] = graph;
 }
@@ -80,25 +80,22 @@ function initMap() {
 					bedId = bedElemId.replace("bed-",""),
 					bed = beds[bedId];
 
-			var bedsSection = d3.select("section#sect-"+bedId);
-
-			if(bedsSection.size()) {
-				bedsSection.classed("show", true)
-			} else {
-				testNames.forEach(function(testName) {
-					var testId = slugify(testName);
-					
-				});
-				bedsSection = d3.select("section#sect-"+bedId);
+			var bedsList = d3.select("#beds-list");
+			var bedSection = d3.select("section#sect-"+bedId);
+			if(bedSection.size()) {
+				bedSection.classed("show", true);
+				d3.select(hexagon).classed("active", true);
 			}
-
 			d3.selectAll("section:not(#sect-"+bedId+")")
 				.classed("show", false);
+			hexagons.filter(".active:not(#bed-"+bedId+")")
+				.classed("active", false);
 
-			// var scrollTop = Math.floor(bedsSection.node().getBoundingClientRect().y - window.scrollY);
-			// window.scrollTo(0, scrollTop);
-
+			$('html, body').animate({
+				scrollTop: bedsList.node().getBoundingClientRect().y + window.scrollY
+			}, 200);
 		});
+
 		hexagons.on("mouseover", function(e) {
 			var mapWrap = d3.select("#beds-map"),
 					hexagon = this,
@@ -132,10 +129,120 @@ function initMap() {
 	// }
 }
 
-Graph.prototype.addLine = function(bed, testName, graphWrap) {
+Graph.prototype.toggleFilter = function(testId) {
+	var graph = this,
+		bed = graph.bed,
+		svg = graph.svg,
+		container = bed.container,
+		filter = container.select(".filter-button."+testId)
+		line = svg.select(".line."+testId),
+		yAxis = svg.select(".y-axis."+testId);
+	filter.classed("active", !filter.node().classList.contains("active"));
+	svg.classed("active", !svg.node().classList.contains("active"));
+	line.classed("show", !line.node().classList.contains("show"));
+	d3.select(line.node().parentNode).raise();
+
+	var showing = svg.selectAll(".line.show");
+	if(showing.size() == 1) {
+		graph.focusTest(showing.attr("data-test"));
+	} else {
+		testNames.forEach(function(otherTestName) {
+			var otherTestId = slugify(otherTestName);
+			if(otherTestId != testId) {
+				graph.blurTest(otherTestId);
+			}
+		});
+	}
+}
+
+Graph.prototype.hoverTest = function(testId) {
+	var graph = this,
+			bed = graph.bed,
+			svg = graph.svg,
+			container = bed.container,
+			filter = container.select(".filter-button."+testId)
+			line = svg.select(".line."+testId),
+			yAxis = svg.select(".y-axis."+testId);
+	svg.classed("hover", true);
+	line.classed("hover", true);
+	yAxis.classed("show", true);
+	d3.select(line.node().parentNode).raise();
+}
+
+Graph.prototype.unhoverTest = function(testId) {
+	var graph = this,
+			bed = graph.bed,
+			svg = graph.svg,
+			container = bed.container,
+			filter = container.select(".filter-button."+testId),
+			label = container.select(".label."+testId),
+			line = svg.select(".line."+testId),
+			yAxis = svg.select(".y-axis."+testId);
+	svg.classed("hover", false);
+	line.classed("hover", false);
+	label.classed("show", false);
+	yAxis.classed("show", false);
+	d3.select(line.node().parentNode).raise();
+}
+
+Graph.prototype.focusTest = function(testId) {
+	var graph = this,
+			bed = graph.bed,
+			svg = graph.svg,
+			container = bed.container,
+			filter = container.select(".filter-button."+testId),
+			line = svg.select(".line."+testId),
+			yAxis = svg.select(".y-axis."+testId);
+
+	testNames.forEach(function(otherTestName) {
+		var otherTestId = slugify(otherTestName);
+		if(otherTestId != testId) {
+			graph.hideTest(otherTestId);
+			graph.blurTest(otherTestId);
+		}
+	});
+
+	filter.classed("active", true);
+	svg.classed("focus", true);
+	line.classed("focus show", true);
+	yAxis.classed("focus show", true);
+	d3.select(line.node().parentNode).raise();
+};
+
+Graph.prototype.blurTest = function(testId) {
+	var graph = this,
+			bed = graph.bed,
+			svg = graph.svg,
+			container = bed.container,
+			filter = container.select(".filter-button."+testId),
+			label = container.select(".label."+testId),
+			line = svg.select(".line."+testId),
+			yAxis = svg.select(".y-axis."+testId);
+	// filter.classed("active", false);
+	svg.classed("focus", false);
+	line.classed("focus", false);
+	yAxis.classed("focus", false);
+};
+
+Graph.prototype.hideTest = function(testId) {
+	var graph = this,
+			bed = graph.bed,
+			svg = graph.svg,
+			container = bed.container,
+			filter = container.select(".filter-button."+testId),
+			label = container.select(".label."+testId),
+			line = svg.select(".line."+testId),
+			yAxis = svg.select(".y-axis."+testId);
+	filter.classed("active", false);
+	line.classed("show", false);
+	yAxis.classed("show", false);
+}
+
+Graph.prototype.addLine = function(bed, testName, isAvg) {
 	var graph = this,
 			testId = slugify(testName),
-			testData = bed.tests[testId].data;
+			testData = isAvg ? averages[testId] : bed.tests[testId].data;
+
 	var svg = graph.svg,
 			width = svg.attr("width"),
 			height = svg.attr("height");
@@ -146,31 +253,26 @@ Graph.prototype.addLine = function(bed, testName, graphWrap) {
 
 	var x = d3.scaleTime().range([0, width]),
 			y = d3.scaleLinear().range([height, 0]);
-	x.domain(d3.extent(bed.lineData, function(d) { return d.date; }));
-	y.domain([0, d3.max(bed.lineData, function(d) { return d.value; })]);
+	x.domain(d3.extent(bed.data, function(d) { return d.date; }));
+	y.domain([0, d3.max(testData, function(d) { return d.value; })]);
 
 	var line = d3.line()
 		.curve(d3.curveCatmullRom)
-		// .curve(d3.curveStepBefore)
-		// .curve(d3.curveStepAfter)
-		// .curve(d3.curveStep)
 		// .curve(d3.curveLinear)
 		.x(function(d) { return x(d.date); })
-		// .y0(height)
 		.y(function(d) { return y(d.value); });
 
 	g.append("path")
 		.datum(testData)
-		.attr("class", "line "+testId)
+		.attr("class", "line "+(isAvg ? "avg avg-" : "show ")+testId)
 		.attr("data-test", testId)
-		.attr("id", testId+"-"+bed.id)
+		.attr("id", testId+"-"+bed.id+(isAvg ? "-avg" : ""))
 		.attr("d", line);
 
 	graph.lines[testId] = line;
 }
 
-
-Graph.prototype.addBar = function(bed, testName, graphWrap) {
+Graph.prototype.addBar = function(bed, testName) {
 	var graph = this,
 			testId = slugify(testName),
 			testData = bed.tests[testId].data;
@@ -207,30 +309,27 @@ Graph.prototype.addBar = function(bed, testName, graphWrap) {
 
 Graph.prototype.createGraph = function(bed) {
 	var graph = this;
-	var lineData = [];
-	var barData = [];
-
-	lineTestNames.forEach(function(testName) {
+	testNames.forEach(function(testName) {
 		var testId = slugify(testName);
 		var test = bed.tests[testId];
-		lineData = lineData.concat(test.data);
+		bed.data = bed.data.concat(test.data);
 	});
-	bed.lineData = lineData;
 
-	barTestNames.forEach(function(testName) {
-		var testId = slugify(testName);
-		var test = bed.tests[testId];
-		barData = barData.concat(test.data);
-	});
-	bed.barData = barData;
+	// barTestNames.forEach(function(testName) {
+	// 	var testId = slugify(testName);
+	// 	var test = bed.tests[testId];
+	// 	barData = barData.concat(test.data);
+	// });
+	// bed.barData = barData;
 
 
-	var wrapperWidth = 1000,
+	var yOffset = 20,
+			wrapperWidth = 1000,
 			wrapperHeight = 600,
 			tickSize = 15;
 
 	var width = wrapperWidth - margin.left - margin.right,
-			height = wrapperHeight - margin.top - margin.bottom;
+			height = wrapperHeight - margin.top - margin.bottom - yOffset;
 			
 	var svg = bed.container.select(".bed-graph")
 			.append("svg")
@@ -243,12 +342,12 @@ Graph.prototype.createGraph = function(bed) {
 	graph.svg = svg;
 
 	var x = d3.scaleTime().range([0, width]),
-			y = d3.scaleLinear().range([height, 0]),
-			y2 = d3.scaleLinear().range([height, 0]);;
+			y = d3.scaleLinear().range([height, 0]);
+			// y2 = d3.scaleLinear().range([height, 0]);
 
 	var xAxis = d3.axisBottom(x).tickSize(tickSize,0),
 			yAxis = d3.axisLeft(y).tickSize(tickSize,0);
-			y2Axis = d3.axisRight(y2).tickSize(tickSize,0);
+			// y2Axis = d3.axisRight(y2).tickSize(tickSize,0);
 
 	var zoom = d3.zoom()
 			.scaleExtent([1, 32])
@@ -265,48 +364,53 @@ Graph.prototype.createGraph = function(bed) {
 						return xt(d.date);
 					}));
 				});
-				svg.select(".axis--x").call(xAxis.scale(xt));
+				svg.select(".x-axis").call(xAxis.scale(xt));
 			});
 
-	x.domain(d3.extent(lineData, function(d) { return d.date; }));
-	y.domain([0, d3.max(lineData, function(d) { return d.value; })]);
-	y2.domain([0, d3.max(barData, function(d) { return d.value; })]);
+	x.domain(d3.extent(bed.data, function(d) { return d.date; }));
+	// y.domain([0, d3.max(lineData, function(d) { return d.value; })]);
+	// y2.domain([0, d3.max(barData, function(d) { return d.value; })]);
 
 	var features = svg.append("g")
 			.attr("class", "features");
-
-	lineTestNames.forEach(function(testName) {
-		graph.addLine(bed, testName);
-	});
-
-	barTestNames.forEach(function(testName) {
-		graph.addBar(bed, testName);
-	});
 
 	var axes = svg.append("g")
 			.attr("class", "axes")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 	axes.append("g")
-			.attr("class", "axis axis--x")
+			.attr("class", "axis x-axis")
 			.attr("transform", "translate(0," + height + ")")
 			.call(xAxis);
 
-	axes.append("g")
-			.attr("class", "axis axis--y")
+	testNames.forEach(function(testName) {
+		var testId = slugify(testName),
+				testData = bed.tests[testId].data;
+
+		y.domain([0, d3.max(testData, function(d) { return d.value; })]);
+		axes.append("g")
+			.attr("class", "axis y-axis "+testId)
 			.call(yAxis);
 
-	axes.append("g")
-			.attr("class", "axis axis--y2")
-			.attr("transform", "translate(" + width + ",0)")
-			.call(y2Axis);
+		graph.addLine(bed, testName);
+		graph.addLine(bed, testName, true);
+	});
+
+	// barTestNames.forEach(function(testName) {
+	// 	graph.addBar(bed, testName);
+	// });
+
+	// axes.append("g")
+	// 		.attr("class", "axis y-axis2")
+	// 		.attr("transform", "translate(" + width + ",0)")
+	// 		.call(y2Axis);
 
 	svg.append("defs").append("clipPath")
 			.attr("id", "clip")
 		.append("rect")
 			.attr("width", width)
-			.attr("height", height+20)
-			.attr("transform", "translate(0,-20)");
+			.attr("height", height+yOffset)
+			.attr("transform", "translate(0,-"+yOffset+")");
 
 	svg.call(zoom);
 }
@@ -351,46 +455,35 @@ Bed.prototype.buildBed = function() {
 		var filter = testInfo
 			.append("div")
 				.attr("data-test", testId)
-				.attr("class", "button filter-button "+testId)
+				.attr("class", "button filter-button active "+testId)
 		filter
 			.append("span")
 				.text(testName);
-
-		filter.on("mouseover", function() {
-			var filter = this,
-					testId = filter.dataset.test,
-					line = testGraph.select(".line."+testId);
-			if(line.empty()) {return}
-			var parent = line.node().parentNode;
-			parent.parentNode.appendChild(parent);
-			line.classed("hover", true);
-			svg.classed("hover", true);
-		});
-
-		filter.on("mouseleave", function() {
-			var filter = this,
-					testId = filter.dataset.test,
-					line = testGraph.select(".line."+testId);
-			if(line.empty()) {return}
-			line.classed("hover", false);
-			svg.classed("hover", false);
-		});
-
-
 	});
+
 	var svg = bed.graph.svg,
-			lines = svg.selectAll(".line");
+			container = bed.container,
+			lines = svg.selectAll(".line"),
+			filters = container.selectAll(".filter-button");
+
+	filters.on("click", function() {
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.toggleFilter(testId);
+	});
+
+	filters.on("mouseover", function() {
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.hoverTest(testId);
+	});
+
+	filters.on("mouseleave", function() {
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.unhoverTest(testId);
+	});
 
 	lines.on("mouseover", function(e) {
-		var line = this,
-				testId = line.dataset.test,
-				label = testGraph.select(".label."+testId);
-
-		var parent = line.parentNode;
-		parent.parentNode.appendChild(parent);
-		label.classed("show", true);
-		svg.classed("hover", true);
-		// hexagon.style('fill', 'red');
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.hoverTest(testId);
 	});
 
 	lines.on("mousemove", function(e) {
@@ -403,23 +496,32 @@ Bed.prototype.buildBed = function() {
 				left = d3.event.pageX - testGraph.node().getBoundingClientRect().x + 15,
 				top = d3.event.pageY - testGraph.node().getBoundingClientRect().y - window.scrollY;
 
+		label.classed("show", true);
 		label.attr("style", "left:"+left+"px; top:"+top+"px;")
 	});
 
-	lines.on("mouseleave", function(e) {
-		var line = this,
-				testId = line.dataset.test,
-				label = testGraph.select(".label."+testId);
-		label.classed("show", false);
-		svg.classed("hover", false);
+	lines.on("click", function(e) {
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.focusTest(testId);
 	});
+
+	lines.on("mouseleave", function(e) {
+		var testId = d3.select(this).attr("data-test");
+		bed.graph.unhoverTest(testId);
+	});
+
+
+	testInfo.append("div")
+		.attr("class", "help filter-help")
+		.text("Toggle the buttons above to hide or show different test results on the graph.");
 };
 
-function averageData(testName) {
+function handleAverageData(testName) {
 	var testId = slugify(testName),
 			test = tests[testId].data,
 			dates = {},
 			sum = 0;
+	averages[testId] = [];
 	test.forEach(function(entry, i) {
 		if(!dates[entry.date]) {
 			dates[entry.date] = [];
@@ -427,8 +529,7 @@ function averageData(testName) {
 		sum += entry.value;
 		dates[entry.date].push(entry.value);
 	});
-	var orderedDates = [],
-			orderedValues =[];
+	var orderedDates = [];
 	Object.keys(dates).forEach(function(date, i){
 		orderedDates.push(new Date(date));
 	});
@@ -442,10 +543,10 @@ function averageData(testName) {
 			sum += value;
 		});
 		var avg = sum/values.length;
-		orderedValues[i] = {
+		averages[testId].push({
 			date: date,
 			value: avg
-		}
+		});
 	});
 }
 
@@ -472,14 +573,22 @@ function handleData(resultData) {
 				};
 				beds[bedId].tests[testId].data.push(entry);
 			});
-			if(Object.keys(beds[bedId].tests).length == 7) {
-				beds[bedId].buildBed();
-			}
+			// if(Object.keys(beds[bedId].tests).length == 7) {
+			// 	beds[bedId].buildBed();
+			// }
 		});
+		handleAverageData(testName);
+	});
+	Object.keys(beds).forEach(function(bedId, i) {
+		var bed = beds[parseInt(bedId)];
+		if(bed) {
+			bed.buildBed();
+		} else {
+		}
 	});
 }
 
-function handleTestInfo(sheetData) {
+function handleTestInfoData(sheetData) {
 	var testData = sheetData.result.values;
 	var testInfo = d3.select("#tests-info");
 	testData.shift();
@@ -500,7 +609,7 @@ function handleTestInfo(sheetData) {
 	});
 }
 
-function getData() {
+function getAllData() {
 	var requests = [];
 	var sheetNames = testNames.slice(0);
 	sheetNames.unshift('Tests');
@@ -524,7 +633,7 @@ function getData() {
 	});
 
 	Promise.all(requests).then(function(values) {
-		handleTestInfo(values.shift());
+		handleTestInfoData(values.shift());
 		handleData(values);
 	});
 }
@@ -547,7 +656,7 @@ function initClient() {
 		"scope": SCOPE,
 		"discoveryDocs": ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
 	}).then(function() {
-		getData();
+		getAllData();
 	});
 }
 

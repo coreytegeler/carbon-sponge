@@ -1,18 +1,18 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i,900,900i&display=swap);
 
 $lightest: white;
-$light: white;
+$medium: #74748b;
 $darkest: black;
 
 $highlight: #f6d465;
 
-$microbiometer: black;
+$microbiometer: dodgerblue;
 $brix: limegreen;
 $ph: coral;
 $temperature: blueviolet;
 $moisture: crimson;
-$nodules: blueviolet;
-$rhizosheaths: dodgerblue;
+$nodules: violet;
+$rhizosheaths: teal;
 
 
 
@@ -58,8 +58,8 @@ $rhizosheaths: dodgerblue;
 }
 
 @mixin xsText {
-	font-size: 1.03rem;
-	line-height: 18px;
+	font-size: .8rem;
+	line-height: 1.2em;
 }
 
 @mixin xl {
