@@ -1,4 +1,5 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i,900,900i&display=swap);
+// @import url(https://fonts.googleapis.com/css?family=Nunito:400,400i,700,700i,900,900i&display=swap);
+// @import url(https://fonts.googleapis.com/css?family=Literata:400,400i,700,700i&display=swap);
 
 $lightest: white;
 $medium: #74748b;
@@ -21,14 +22,12 @@ $rhizosheaths: teal;
 // plum
 // cornsilk
 
-// $displayFont: "Nunito", sans-serif;
+$serifFont: "Literata", times, serif;
 
 @mixin displayReg {
-	font-family: $displayFont;
 	font-weight: 400;
 }
 @mixin displayBold {
-	font-family: $displayFont;
 	font-weight: 700;
 }
 
@@ -45,6 +44,9 @@ $rhizosheaths: teal;
 @mixin lgText {
 	font-size: 2.5vw;
 	line-height: 1.2em;
+	@include lg {
+		@include smText;
+	}
 }
 
 @mixin mdText {
@@ -97,6 +99,11 @@ $rhizosheaths: teal;
     .03em -.03em $back,
     -.03em .03em $back,
     -.03em -.03em $back;
+}
+
+@mixin nounderline {
+	background: none;
+	text-shadow: none;
 }
 
 @mixin hide {

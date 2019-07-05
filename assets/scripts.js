@@ -6,12 +6,13 @@ var SPREADSHEET_ID = "1RjOpiMjIEZ2_NCrAMBqCSFj-3sYQu8NHhI1FsLYStjA";
 
 var body = document.body;
 
-var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Nodules', 'Rhizosheaths', 'Moisture', 'Temperature'];
+var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Nodules', 'Rhizosheaths', 'Moisture', 'Temperature'],
 		tests = {},
 		beds = {},
 		graphs = {},
 		averages = {},
-		margin = {top: 30, right: 30, bottom: 30, left: 70};
+		map = null,
+		margin = {top: 30, right: 30, bottom: 30, left: 100};
 
 
 function Bed(bedId) {
@@ -38,91 +39,117 @@ function Test(testName) {
 	this.id = testId;
 	this.name = testName;
 	this.data = [];
-	tests[testId] = this;
+	tests[testId] = Object.assign(tests[testId], this);
 }
+
+
+Bed.prototype.openBed = function() {
+	var bed = this,
+			bedId = bed.id,
+			bedsNames = d3.select("#beds-names"),
+			bedsList = d3.select("#beds-list"),
+			bedSection = d3.select("section#sect-"+bedId),
+			bedIcons = map.selectAll("#beds > g");
+
+	bedSection.classed("show", true);
+	map.select("#bed-"+bedId).classed("active", true);
+	bedsNames.select(".bed-name[data-id=\""+bedId+"\"]").classed("active", true);
+
+	d3.selectAll("section:not(#sect-"+bedId+")")
+		.classed("show", false);
+	bedIcons.filter(".active:not(#bed-"+bedId+")")
+		.classed("active", false);
+	bedsNames.selectAll(".bed-name:not([data-id=\""+bedId+"\"]")
+		.classed("active", false);
+
+	$('html, body').animate({
+		scrollTop: bedsList.node().getBoundingClientRect().y + window.scrollY
+	}, 400);
+}
+
 
 function initMap() {
 	// for(var i = 0; i < 2; i++) {
 		// d3.xml("/assets/map"+(i+1)+".svg", function(data) {
+	var bedsMap = d3.select("#beds-map"),
+			bedsNames = d3.select("#beds-names");
+
 	d3.xml("./assets/map.svg", function(data) {
-		var mapWrap = d3.select("#beds-map")
-				svg = data.documentElement;
-		mapWrap
+		
+		var svg = data.documentElement;
+		map = bedsMap;
+
+		bedsMap
 			.append("div")
 				.attr("class", "col col-12")
 				.node()
 			.append(svg);
-		var bedsMap = mapWrap.selectAll("svg"),
-				hexagons = bedsMap.selectAll("#beds > g");
-		hexagons.each(function() {
-			var hexagon = this;
-					bedId = hexagon.id,
+
+		var mapSvg = bedsMap.select("svg"),
+				bedIcons = mapSvg.selectAll("#beds > g");
+
+
+
+		bedIcons.each(function(g, i) {
+			var bedIcon = this;
+					bedId = bedIcon.id,
 					bedNo = bedId.replace("bed-",""),
 					labelText = "Bed No. "+bedNo;
 
-			mapWrap
+			bedsMap
 				.append("div")
 					.attr("class", "label bed-label "+bedId)
 				.append("span")
 					.text(labelText);
-			// var wait = Math.random() * 100;
-			// setTimeout(function() {
-				// d3.select(hexagon).attr("class", "show");
-			// }, wait);
-		});
-		setTimeout(function() {
-			bedsMap.attr("class", "show");
+			
+			bedsNames
+				.append("span")
+				.attr("class", "bed-name")
+				.attr("data-id", i+1)
+				.text(i+1);
 		});
 
-		hexagons.on("click", function(e) {
-			var hexagon = this,
-					bedElemId = hexagon.id,
+		bedIcons.on("click", function(e) {
+			var bedIcon = this,
+					bedElemId = bedIcon.id,
 					bedId = bedElemId.replace("bed-",""),
 					bed = beds[bedId];
-
-			var bedsList = d3.select("#beds-list");
-			var bedSection = d3.select("section#sect-"+bedId);
-			if(bedSection.size()) {
-				bedSection.classed("show", true);
-				d3.select(hexagon).classed("active", true);
-			}
-			d3.selectAll("section:not(#sect-"+bedId+")")
-				.classed("show", false);
-			hexagons.filter(".active:not(#bed-"+bedId+")")
-				.classed("active", false);
-
-			$('html, body').animate({
-				scrollTop: bedsList.node().getBoundingClientRect().y + window.scrollY
-			}, 200);
+			bed.openBed();
 		});
 
-		hexagons.on("mouseover", function(e) {
-			var mapWrap = d3.select("#beds-map"),
-					hexagon = this,
-					bedId = hexagon.id,
-					label = mapWrap.select(".label."+bedId);
+		bedsNames.selectAll(".bed-name").on("click", function(e) {
+			var bedId = this.dataset.id,
+					bed = beds[bedId];
+			bed.openBed();
+		});
+
+		bedIcons.on("mouseover", function(e) {
+			var bedsMap = d3.select("#beds-map"),
+					bedIcon = this,
+					bedId = bedIcon.id,
+					label = bedsMap.select(".label."+bedId);
 			label.classed("show", true);
 		});
 
-		hexagons.on("mousemove", function(e) {
-			var mapWrap = d3.select("#beds-map"),
-					hexagon = this,
-					bedId = hexagon.id,
-					label = mapWrap.select(".label."+bedId);
-			var mouse = d3.mouse(hexagon),
+		bedIcons.on("mousemove", function(e) {
+			var bedsMap = d3.select("#beds-map"),
+					bedIcon = this,
+					bedId = bedIcon.id,
+					label = bedsMap.select(".label."+bedId);
+			var mouse = d3.mouse(bedIcon),
 					x = mouse[0],
 					y = mouse[1],
-					left = d3.event.pageX - mapWrap.node().getBoundingClientRect().x + 15,
-					top = d3.event.pageY - mapWrap.node().getBoundingClientRect().y - window.scrollY;
+					left = d3.event.pageX - bedsMap.node().getBoundingClientRect().x + 15,
+					top = d3.event.pageY - bedsMap.node().getBoundingClientRect().y - window.scrollY;
 
 			label.attr("style", "left:"+left+"px; top:"+top+"px;")
 		});
 
-		hexagons.on("mouseleave", function(e) {
-			var mapWrap = d3.select("#beds-map"),
-					hexagon = this,
-					bedId = hexagon.id,
-					label = mapWrap.select(".label."+bedId);
+		bedIcons.on("mouseleave", function(e) {
+			var bedsMap = d3.select("#beds-map"),
+					bedIcon = this,
+					bedId = bedIcon.id,
+					label = bedsMap.select(".label."+bedId);
 			label.classed("show", false);
 		});
 	});
@@ -134,16 +161,18 @@ Graph.prototype.toggleFilter = function(testId) {
 		bed = graph.bed,
 		svg = graph.svg,
 		container = bed.container,
-		filter = container.select(".filter-button."+testId)
-		line = svg.select(".line."+testId),
-		yAxis = svg.select(".y-axis."+testId);
+		filter = container.select(".filter-button."+testId),
+		line = svg.select(".line."+testId);
 	filter.classed("active", !filter.node().classList.contains("active"));
 	svg.classed("active", !svg.node().classList.contains("active"));
 	line.classed("show", !line.node().classList.contains("show"));
 	d3.select(line.node().parentNode).raise();
 
 	var showing = svg.selectAll(".line.show");
-	if(showing.size() == 1) {
+			showingSize = showing.size();
+	if(showingSize == 0) {
+		graph.blurTest(testId);
+	} else if(showingSize == 1) {
 		graph.focusTest(showing.attr("data-test"));
 	} else {
 		testNames.forEach(function(otherTestName) {
@@ -160,12 +189,14 @@ Graph.prototype.hoverTest = function(testId) {
 			bed = graph.bed,
 			svg = graph.svg,
 			container = bed.container,
-			filter = container.select(".filter-button."+testId)
+			filter = container.select(".filter-button."+testId),
 			line = svg.select(".line."+testId),
-			yAxis = svg.select(".y-axis."+testId);
+			yAxis = svg.select(".y-axis."+testId),
+			yAxisLabel = svg.select(".y-axis-label."+testId);
 	svg.classed("hover", true);
 	line.classed("hover", true);
 	yAxis.classed("show", true);
+	yAxisLabel.classed("show", true);
 	d3.select(line.node().parentNode).raise();
 }
 
@@ -177,11 +208,13 @@ Graph.prototype.unhoverTest = function(testId) {
 			filter = container.select(".filter-button."+testId),
 			label = container.select(".label."+testId),
 			line = svg.select(".line."+testId),
-			yAxis = svg.select(".y-axis."+testId);
+			yAxis = svg.select(".y-axis."+testId),
+			yAxisLabel = svg.select(".y-axis-label."+testId);
 	svg.classed("hover", false);
 	line.classed("hover", false);
 	label.classed("show", false);
 	yAxis.classed("show", false);
+	yAxisLabel.classed("show", false);
 	d3.select(line.node().parentNode).raise();
 }
 
@@ -193,6 +226,7 @@ Graph.prototype.focusTest = function(testId) {
 			filter = container.select(".filter-button."+testId),
 			line = svg.select(".line."+testId),
 			yAxis = svg.select(".y-axis."+testId);
+			yAxisLabel = svg.select(".y-axis-label."+testId);
 
 	testNames.forEach(function(otherTestName) {
 		var otherTestId = slugify(otherTestName);
@@ -206,6 +240,7 @@ Graph.prototype.focusTest = function(testId) {
 	svg.classed("focus", true);
 	line.classed("focus show", true);
 	yAxis.classed("focus show", true);
+	yAxisLabel.classed("focus show", true);
 	d3.select(line.node().parentNode).raise();
 };
 
@@ -217,11 +252,13 @@ Graph.prototype.blurTest = function(testId) {
 			filter = container.select(".filter-button."+testId),
 			label = container.select(".label."+testId),
 			line = svg.select(".line."+testId),
-			yAxis = svg.select(".y-axis."+testId);
+			yAxis = svg.select(".y-axis."+testId),
+			yAxisLabel = svg.select(".y-axis-label."+testId);
 	// filter.classed("active", false);
 	svg.classed("focus", false);
 	line.classed("focus", false);
 	yAxis.classed("focus", false);
+	yAxisLabel.classed("focus", false);
 };
 
 Graph.prototype.hideTest = function(testId) {
@@ -232,10 +269,12 @@ Graph.prototype.hideTest = function(testId) {
 			filter = container.select(".filter-button."+testId),
 			label = container.select(".label."+testId),
 			line = svg.select(".line."+testId),
-			yAxis = svg.select(".y-axis."+testId);
+			yAxis = svg.select(".y-axis."+testId),
+			yAxis = svg.select(".y-axis-label."+testId);
 	filter.classed("active", false);
 	line.classed("show", false);
 	yAxis.classed("show", false);
+	yAxisLabel.classed("show", false);
 }
 
 Graph.prototype.addLine = function(bed, testName, isAvg) {
@@ -315,14 +354,6 @@ Graph.prototype.createGraph = function(bed) {
 		bed.data = bed.data.concat(test.data);
 	});
 
-	// barTestNames.forEach(function(testName) {
-	// 	var testId = slugify(testName);
-	// 	var test = bed.tests[testId];
-	// 	barData = barData.concat(test.data);
-	// });
-	// bed.barData = barData;
-
-
 	var yOffset = 20,
 			wrapperWidth = 1000,
 			wrapperHeight = 600,
@@ -343,14 +374,11 @@ Graph.prototype.createGraph = function(bed) {
 
 	var x = d3.scaleTime().range([0, width]),
 			y = d3.scaleLinear().range([height, 0]);
-			// y2 = d3.scaleLinear().range([height, 0]);
-
-	var xAxis = d3.axisBottom(x).tickSize(tickSize,0),
+	var xAxis = d3.axisBottom(x).tickSize(tickSize,0).tickFormat(d3.timeFormat("%b %d")),
 			yAxis = d3.axisLeft(y).tickSize(tickSize,0);
-			// y2Axis = d3.axisRight(y2).tickSize(tickSize,0);
 
 	var zoom = d3.zoom()
-			.scaleExtent([1, 32])
+			.scaleExtent([3, 8])
 			.translateExtent([[0, 0], [width, height]])
 			.extent([[0, 0], [width, height]])
 			.on("zoom", function() {
@@ -364,12 +392,10 @@ Graph.prototype.createGraph = function(bed) {
 						return xt(d.date);
 					}));
 				});
-				svg.select(".x-axis").call(xAxis.scale(xt));
+				svg.select(".x-axis").call(xAxis.scale(xt).ticks(d3.timeDay.every(1)));
 			});
 
 	x.domain(d3.extent(bed.data, function(d) { return d.date; }));
-	// y.domain([0, d3.max(lineData, function(d) { return d.value; })]);
-	// y2.domain([0, d3.max(barData, function(d) { return d.value; })]);
 
 	var features = svg.append("g")
 			.attr("class", "features");
@@ -383,27 +409,39 @@ Graph.prototype.createGraph = function(bed) {
 			.attr("transform", "translate(0," + height + ")")
 			.call(xAxis);
 
+	axes.append("text")
+			.attr("class", "axis-label y-axis-label default")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("x",-height/2)
+      .attr("dy", "-1em")
+      .style("text-anchor", "middle")
+	    .text("Hover or select a line to view values");
+
 	testNames.forEach(function(testName) {
 		var testId = slugify(testName),
+				test = tests[testId],
 				testData = bed.tests[testId].data;
 
 		y.domain([0, d3.max(testData, function(d) { return d.value; })]);
+
 		axes.append("g")
 			.attr("class", "axis y-axis "+testId)
 			.call(yAxis);
 
+
+		axes.append("text")
+			.attr("class", "axis-label y-axis-label "+testId)
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0)
+      .attr("x",-height/2)
+      .attr("dy", "-4em")
+      .style("text-anchor", "middle")
+	    .text(test.unitExt);
+
 		graph.addLine(bed, testName);
 		graph.addLine(bed, testName, true);
 	});
-
-	// barTestNames.forEach(function(testName) {
-	// 	graph.addBar(bed, testName);
-	// });
-
-	// axes.append("g")
-	// 		.attr("class", "axis y-axis2")
-	// 		.attr("transform", "translate(" + width + ",0)")
-	// 		.call(y2Axis);
 
 	svg.append("defs").append("clipPath")
 			.attr("id", "clip")
@@ -413,9 +451,10 @@ Graph.prototype.createGraph = function(bed) {
 			.attr("transform", "translate(0,-"+yOffset+")");
 
 	svg.call(zoom);
+	zoom.scaleTo(svg, 3);
 }
 
-Bed.prototype.buildBed = function() {
+Bed.prototype.buildBed = function(lastBed) {
 	var bed = this,
 			bedId = bed.id;
 
@@ -433,32 +472,75 @@ Bed.prototype.buildBed = function() {
 			// .attr("class", "graphs-wrapper");
 			.attr("class", "graph-wrapper row");
 
-	var testGraph = graphWrap.append("div")
+	var bedGraph = graphWrap.append("div")
 			.attr("class", "bed-graph col col-12 col-md-9");
 
-	var testInfo = graphWrap.append("div")
-			.attr("class", "bed-graph-info col col-12 col-md-3");
+	var bedFilters = graphWrap.append("div")
+			.attr("class", "bed-filters col col-12 col-md-3");
+
+	var bedInfo = bedsSection.append("div")
+			.attr("class", "bed-info row");
+
+	bedInfo.append("div")
+			.attr("class", "col col-12")
+		.append("h3")
+			.attr("class", "recent-title")
+			.text("Recent test data");
 
 	bed.container = bedsSection;
 	bed.graph = new Graph(bedId);
 
 	testNames.forEach(function(testName, i) {
-		var testId = slugify(testName);
+		var testId = slugify(testName),
+				testData = bed.tests[testId],
+				lastEntry = testData.data[testData.data.length-1],
+				lastValue = lastEntry.value,
+				lastDate = lastEntry.date;
 
-		testGraph
+		bedGraph
 			.append("div")
-				.attr("data-test", testId)
 				.attr("class", "label bed-label "+testId)
+				.attr("data-test", testId)
 			.append("span")
 				.text(testName);
 
-		var filter = testInfo
+		var filter = bedFilters
 			.append("div")
+				.attr("class", "button filter-button active color "+testId)
 				.attr("data-test", testId)
-				.attr("class", "button filter-button active "+testId)
 		filter
 			.append("span")
 				.text(testName);
+
+		
+		var testInfo = bedInfo
+			.append("div")
+				.attr("class", "col-12 col-md-6 col-xl-4 test-info "+testId)
+				.attr("data-test", testId)
+			.append("div")
+				.attr("class", "test-info-inner color");
+
+		testInfo
+			.append("h3")
+				.attr("class", "color")
+				.text(testName);
+
+		var formatTime = d3.timeFormat("%B %d, %Y");
+
+		testInfo
+			.append("div")
+				.attr("class", "value")
+				.text(lastValue)
+			.append("span")
+				.attr("class", "unit")
+				.text(tests[testId].unit);
+
+		testInfo
+			.append("div")
+			.attr("class", "date note")
+			.text("Tested on "+formatTime(lastDate));
+
+
 	});
 
 	var svg = bed.graph.svg,
@@ -489,12 +571,12 @@ Bed.prototype.buildBed = function() {
 	lines.on("mousemove", function(e) {
 		var line = this,
 				testId = line.dataset.test,
-				label = testGraph.select(".label."+testId);
+				label = bedGraph.select(".label."+testId);
 		var mouse = d3.mouse(line),
 				x = mouse[0],
 				y = mouse[1],
-				left = d3.event.pageX - testGraph.node().getBoundingClientRect().x + 15,
-				top = d3.event.pageY - testGraph.node().getBoundingClientRect().y - window.scrollY;
+				left = d3.event.pageX - bedGraph.node().getBoundingClientRect().x + 15,
+				top = d3.event.pageY - bedGraph.node().getBoundingClientRect().y - window.scrollY;
 
 		label.classed("show", true);
 		label.attr("style", "left:"+left+"px; top:"+top+"px;")
@@ -511,10 +593,22 @@ Bed.prototype.buildBed = function() {
 	});
 
 
-	testInfo.append("div")
-		.attr("class", "help filter-help")
-		.text("Toggle the buttons above to hide or show different test results on the graph.");
+	bedFilters.append("div")
+		.attr("class", "note filter-note")
+		.text("Toggle the buttons above to hide or show test results on the graph.");
+
+	var bedIcon = map.selectAll("#beds > g#bed-"+bedId);
+	var bedName = d3.selectAll("#beds-names .bed-name[data-id=\""+bedId+"\"]");
+	setTimeout(function() {
+		bedIcon.classed("show", true);
+		bedName.classed("show", true);
+		if(lastBed) {
+			d3.select("#beds-nav").classed("done", true);
+		}
+	}, bedId*Math.floor((Math.random() * 100) + 1));
+	// map.classed("show", true);
 };
+
 
 function handleAverageData(testName) {
 	var testId = slugify(testName),
@@ -573,35 +667,33 @@ function handleData(resultData) {
 				};
 				beds[bedId].tests[testId].data.push(entry);
 			});
-			// if(Object.keys(beds[bedId].tests).length == 7) {
-			// 	beds[bedId].buildBed();
-			// }
 		});
 		handleAverageData(testName);
 	});
+
 	Object.keys(beds).forEach(function(bedId, i) {
 		var bed = beds[parseInt(bedId)];
-		if(bed) {
-			bed.buildBed();
-		} else {
-		}
+		bed.buildBed(i == Object.keys(beds).length-1);
 	});
 }
 
 function handleTestInfoData(sheetData) {
 	var testData = sheetData.result.values;
-	var testInfo = d3.select("#tests-info");
+	var bedFilters = d3.select("#tests-info");
 	testData.shift();
 	testData.forEach(function(row, i) {
 		var testName = row[0],
 				testId = slugify(testName);
+
 		tests[testId] = {
 			name: testName,
 			id: testId,
 			unit: row[1],
-			about: row[2]
+			unitExt: row[2],
+			about: row[3]
 		};
-		testInfo.append("div")
+
+		bedFilters.append("div")
 				.attr("class", "test-block "+testId)
 			.append("h3")
 				.attr("class", "test-title")

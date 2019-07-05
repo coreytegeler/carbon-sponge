@@ -4,6 +4,7 @@
     <title>Carbon Sponge</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="./assets/style.css" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Literata:400,400i,700,700i&display=swap" rel="stylesheet">
   </head>
   <body>
 
@@ -16,9 +17,38 @@
         </h1>
       </div>
 
+      <div id="topNav">
+        <nav class="main-nav dropdown-hover">
+          <ul data-content-field="navigation">
+            <li class="gallery-collection active-link">
+              <a href="/">project</a>
+            </li>
+            <li class="page-collection">
+              <a href="/about">about</a>
+            </li>
+            <li class="page-collection">
+              <a href="/people">people</a>
+            </li>
+            <li class="events-collection">
+              <a href="/events">events</a>
+            </li>
+            <li class=" external-link">
+              <a href="http://data.carbonsponge.org/" target="_blank">data</a>
+            </li>
+            <li class="page-collection">
+              <a href="/media">media/press</a>
+            </li>
+            <li class="page-collection">
+              <a href="/resources">resources</a>
+            </li>
+            <li class="page-collection">
+              <a href="/contact">contact</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-      <nav>
-      </nav>
+      
     </header>
 
     <main>
@@ -31,11 +61,15 @@
 
               <p>Click a bed to learn what’s growing in it and view data collected about the bed’s soil.</p>
 
-              <p>We test each bed's <em>microbial biomass</em>, <em>photosyntheses</em>, <em>pH</em>, <em>temperature</em>, <em>moisture</em>, <em>nitrogen fixing</em>, and <em>top soil production</em>.</p>
+              <p>We test each bed's <em class="microbiometer color">microbial biomass</em>, <em class="brix color">photosyntheses</em>, <em class="ph color">pH</em>, <em class="temperature color">temperature</em>, <em class="moisture color">moisture</em>, <em class="nodules color">nitrogen fixing</em>, and <em class="rhizosheaths color">top soil production</em>.</p>
             </div>
           </div>
           <div class="col col-12 col-lg-7">
-            <div id="beds-map" class="row">
+            <div id="beds-map">
+              <div class="loading note">Loading test data...</div>
+            </div>
+            <div id="beds-names">
+
             </div>
           </div>
         </div>
