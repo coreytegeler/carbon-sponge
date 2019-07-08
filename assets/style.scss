@@ -15,10 +15,6 @@ html, body {
 	@include smText;
 }
 
-body {
-	display: table;
-}
-
 * {
 	box-sizing: border-box;
 }
@@ -100,8 +96,14 @@ li {
 	margin: 0 0 1rem 0;
 }
 
-header#header {
+#page {
+	width: 100%;
 	padding: 60px;
+}
+
+header#header {
+	width: 100%;
+	display: table;
 }
 
 #logo {
@@ -153,7 +155,14 @@ header#header {
 	}
 }
 
+main {
+	padding: 60px 0;
+}
+
 #beds-nav {
+	.col {
+		margin: 0 0 60px 0;
+	}
 	&.done {
 		.loading {
 			display: none;
@@ -233,10 +242,6 @@ header#header {
 			}
 		}
 	}
-}
-
-main {
-	padding: 60px;
 }
 
 #tests-info {
@@ -450,6 +455,13 @@ section {
 		text {
 			font-weight: bold;
 			@include smText;
+		}
+	}
+	@include lg {
+		padding-bottom: 0;
+		svg {
+			width: 100%;
+			position: static;
 		}
 	}
 }
