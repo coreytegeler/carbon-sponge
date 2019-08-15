@@ -1,6 +1,6 @@
 {
   "name": "carbon-sponge",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
@@ -33,7 +33,12 @@
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
     "merge": ">=1.2.1",
-    "npm": "^6.9.0",
+    "npm": "^6.10.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6",
     "yargs": "^6.6.0"
+  },
+  "dependencies": {
+    "smoothscroll-polyfill": "^0.4.4"
   }
 }

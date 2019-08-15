@@ -10,6 +10,7 @@ var testNames = ['MicroBIOMETER', 'Brix', 'pH', 'Nodules', 'Rhizosheaths', 'Mois
 		tests = {},
 		beds = {},
 		graphs = {},
+		tables = {},
 		averages = {},
 		map = null,
 		margin = {top: 30, right: 30, bottom: 30, left: 100};
@@ -32,6 +33,14 @@ function Graph(bedId) {
 	this.bars = [];
 	graph.createGraph(bed);
 	graphs[bedId] = graph;
+}
+
+function Table(bedId) {
+	var table = this,
+			bed = beds[bedId];
+	this.bed = bed;
+	table.createTable(bed);
+	tables[bedId] = table;
 }
 
 function Test(testName) {
@@ -62,8 +71,8 @@ Bed.prototype.openBed = function() {
 	bedsNames.selectAll(".bed-name:not([data-id=\""+bedId+"\"]")
 		.classed("active", false);
 
-	$('html, body').animate({
-		scrollTop: bedsList.node().getBoundingClientRect().y + window.scrollY
+	$('html').animate({
+		scrollTop: bedsList.node().getBoundingClientRect().y + $('html').scrollTop()
 	}, 400);
 }
 
@@ -346,6 +355,48 @@ Graph.prototype.addBar = function(bed, testName) {
 	// graph.lines[testId] = line;
 }
 
+Table.prototype.createTable = function(bed) {
+	// var table = this,
+	// 		tests = bed.tests,
+	// 		testKeys = Object.keys(tests);
+
+	// var tablesWrap = d3.select("#tables");
+
+	// testKeys.forEach(function(testKey, i) {
+	// 	var testObj = tests[testKey],
+	// 			testName = testObj.name,
+	// 			testData = testObj.data;
+	// 	testData.forEach(function(testDatum, i) {
+	// 		var date = testDatum.date,
+	// 				value = testDatum.value;
+
+	// 		var row = tablesWrap.select("[data-date='"+date+"']");
+	// 		if(row.empty()) {
+	// 			row = tablesWrap.append("div")
+	// 				.attr("class", "row")
+	// 				.attr("data-date", date)
+	// 				.text(date);
+	// 		}
+			
+	// 	});
+	// });
+
+	
+	// var tableWrap = tablesWrap
+	// 		.append("div")
+	// 			.attr("class", "col-12 col-md-6 col-xl-4 test-info "+testId)
+	// 			.attr("data-test", testId)
+	// 		.append("div")
+	// 			.attr("class", "test-info-inner color");
+
+	// 	testInfo
+	// 		.append("h3")
+	// 			.attr("class", "color")
+	// 			.text(testName);
+
+	// 	var formatTime = d3.timeFormat("%B %d, %Y");
+}
+
 Graph.prototype.createGraph = function(bed) {
 	var graph = this;
 	testNames.forEach(function(testName) {
@@ -489,6 +540,9 @@ Bed.prototype.buildBed = function(lastBed) {
 
 	bed.container = bedsSection;
 	bed.graph = new Graph(bedId);
+	if(bedId == 1) {
+		bed.table = new Table(bedId);
+	}
 
 	testNames.forEach(function(testName, i) {
 		var testId = slugify(testName),
