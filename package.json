@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/coreytegeler/carbon-sponge#readme",
   "devDependencies": {
-    "browser-sync": "^2.3.1",
+    "browser-sync": "^2.27.10",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-clean-css": "^3.10.0",
